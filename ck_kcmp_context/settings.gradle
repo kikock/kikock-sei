@@ -1,0 +1,2 @@
+rootProject.name = 'ck_kcmp_context'
+include 'kcmp_context_ck'
