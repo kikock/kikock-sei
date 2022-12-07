@@ -19,7 +19,7 @@ public class Pointcuts {
     /**
      * 实现了 BaseService 接口/类的目标对象的任意连接点（在Spring AOP中只是方法执行）
      */
-    @Pointcut("target(com.kcmp.core.jx.service.BaseService)")
+    @Pointcut("target(com.kcmp.core.ck.service.BaseService)")
     public void baseServicePointcut() {
     }
 

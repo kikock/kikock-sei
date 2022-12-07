@@ -1,7 +1,8 @@
 package com.kcmp.ck.spring.boot.autoconfigure;
 
-import com.kcmp.core.jx.dao.impl.BaseDaoFactoryBean;
-import com.kcmp.core.jx.dao.impl.BaseEntityDaoImpl;
+
+import com.kcmp.core.ck.dao.impl.BaseDaoFactoryBean;
+import com.kcmp.core.ck.dao.impl.BaseEntityDaoImpl;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
