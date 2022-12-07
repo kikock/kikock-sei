@@ -1,0 +1,3 @@
+rootProject.name = 'ck_kcmp_spring_boot_starter'
+include 'kcmp_spring_boot_starter_ck'
+

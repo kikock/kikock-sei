@@ -1,0 +1,21 @@
+# 自定义配置
+org.springframework.boot.env.EnvironmentPostProcessor=\
+  com.kcmp.ck.spring.boot.autoconfigure.GlobalEnvironmentPostProcessor,\
+  com.kcmp.ck.spring.boot.autoconfigure.AdminEnvironmentPostProcessor
+
+## 自定义配置
+#org.springframework.boot.env.EnvironmentPostProcessor=\
+#  GlobalEnvironmentPostProcessor
+
+# Auto Configure
+# SwaggerConfiguration
+# RestfulAPIConfig,\
+# com.kcmp.ck.grpc.config.GrpcAutoConfiguration
+# RestfulAPIConfig用api时单独使用
+# RestfulAPIConfig,\
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.kcmp.ck.spring.boot.autoconfigure.ECMPAutoConfiguration,\
+  com.kcmp.ck.spring.boot.autoconfigure.ZipkinTracingConfiguration,\
+  com.kcmp.ck.spring.boot.autoconfigure.JpaAutoConfiguration,\
+  com.kcmp.ck.spring.boot.autoconfigure.ServiceConfig,\
+  com.kcmp.ck.spring.boot.autoconfigure.RedisConfig

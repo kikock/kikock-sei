@@ -1,0 +1,37 @@
+﻿syntax = "proto3";
+
+package cpm.ecmp.rpc;
+
+option java_package = "com.ecmp.rpc";
+option java_outer_classname = "GrpcService";
+option java_multiple_files = false;
+
+// 定义通用的 Grpc 服务
+service CommonService {
+    // 处理请求
+    rpc handle (Request) returns (Response) {
+    }
+
+//    // 处理请求，服务端流式
+//    rpc serverStreamingHandle (Request) returns (stream Response) {
+//    }
+//
+//    // 处理请求，客户端流式
+//    rpc clientStreamingHandle (stream Request) returns (Response) {
+//    }
+//
+//    // 处理请求，双向流式
+//    rpc bidirectionalStreamingHandle (stream Request) returns (stream Response) {
+//    }
+}
+
+// 定义通用的 Grpc 请求体
+message Request {
+    int32 serialize = 1;
+    bytes request = 2;
+}
+
+// 定义通用的 Grpc 响应体
+message Response {
+    bytes response = 1;
+}
