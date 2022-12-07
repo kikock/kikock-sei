@@ -1,0 +1,37 @@
+allprojects {
+    buildscript {
+        repositories {
+            mavenLocal()
+
+            maven { url REPOSITORY }
+
+            mavenCentral()
+        }
+
+        dependencies {
+            classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        }
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'maven'
+
+    // java编译的时候缺省状态下会因为中文字符而失败
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+    group = GROUP
+    version = VERSION
+
+    // JVM 版本号要求
+    sourceCompatibility = COMPATIBILITY
+    targetCompatibility = COMPATIBILITY
+
+    repositories {
+        mavenLocal()
+        maven { url REPOSITORY }
+    }
+
+}
+
+

@@ -1,0 +1,78 @@
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+//打包为 war
+war {
+    enabled = true
+    //包名称
+    archiveName "stringBootAdmin.${extension}"
+    //包存放路径
+    destinationDir = file("${rootProject.projectDir}/build/war")
+//    // war包中排除WEB-INF\classes\application.properties文件
+//    rootSpec.exclude("**/application.properties")
+}
+//springBoot 启动类地址
+springBoot {
+    mainClassName = "com.kcmp.ck.admin.StringBootAdminApplication"
+}
+
+dependencies {
+    compile(
+
+//            Spring Boot Admin 服务端
+            "de.codecentric:spring-boot-admin-starter-server:${springBootAdmin}",
+//            Spring Boot web
+            "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
+
+
+    )
+
+    // 测试依赖
+    testCompile(
+            "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    )
+}
+
+/////////////////////////////////////上传Maven仓库 开始////////////////////////////////////////
+//打包
+jar {
+    manifest {
+        attributes("Implementation-Title": "kcmp-config-admin")
+        attributes("Build-Time": new Date().format("yyyy-MM-dd HH:mm:ss"))
+    }
+}
+//打包源代码
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+//如果希望gradle install，安装到.m2本地仓库，参考下面的内容
+install {
+    repositories.mavenInstaller {
+        pom.version = "$project.version"
+        pom.artifactId = "$project.name"
+        pom.groupId = "$project.group"
+    }
+}
+
+//上传到nexus
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: MAVEN_REPO_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+            pom.version = "$project.version"
+            pom.artifactId = "$project.name"
+            pom.groupId = "$project.group"
+        }
+    }
+    return 'Success'
+}
+
+/////////////////////////////////////上传Maven仓库  结束////////////////////////////////////////

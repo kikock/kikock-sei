@@ -1,0 +1,3 @@
+rootProject.name = 'ck_kcmp_util'
+include 'kcmp_util_ck'
+

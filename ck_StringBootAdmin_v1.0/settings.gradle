@@ -1,0 +1,4 @@
+rootProject.name = 'ck_StringBootAdmin_v1.0'
+include 'stringBootAdmin'
+
+
