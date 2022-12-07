@@ -120,7 +120,7 @@ public final class OperateResultWithData<T> extends ResponseData<T> implements S
      * @return 返回一个成功的操作状态对象
      */
     public static <Data> OperateResultWithData<Data> operationSuccess() {
-        return new OperateResultWithData<>(StatusEnum.SUCCESS, "ecmp_context_00001");
+        return new OperateResultWithData<>(StatusEnum.SUCCESS, "kcmp_context_00001");
     }
 
     /**
@@ -148,7 +148,7 @@ public final class OperateResultWithData<T> extends ResponseData<T> implements S
      * @return 返回一个成功的操作状态对象
      */
     public static <Data> OperateResultWithData<Data> operationSuccessWithData(Data data) {
-        return new OperateResultWithData<>(StatusEnum.SUCCESS, data, "ecmp_context_00001");
+        return new OperateResultWithData<>(StatusEnum.SUCCESS, data, "kcmp_context_00001");
     }
 
     /**

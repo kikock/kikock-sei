@@ -1,7 +1,7 @@
 package com.kcmp.ck.spring.boot.autoconfigure;
 
-import com.ecmp.core.jx.dao.impl.BaseDaoFactoryBean;
-import com.ecmp.core.jx.dao.impl.BaseEntityDaoImpl;
+import com.kcmp.core.jx.dao.impl.BaseDaoFactoryBean;
+import com.kcmp.core.jx.dao.impl.BaseEntityDaoImpl;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 @ConditionalOnBean({DataSource.class})
 @ConditionalOnClass({BaseDaoFactoryBean.class, BaseEntityDaoImpl.class})
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
-@EnableJpaRepositories(basePackages = {"com.ecmp.**.dao"}, repositoryFactoryBeanClass = BaseDaoFactoryBean.class)
+@EnableJpaRepositories(basePackages = {"com.kcmp.**.dao"}, repositoryFactoryBeanClass = BaseDaoFactoryBean.class)
 @EnableTransactionManagement
 public class JpaAutoConfiguration {
 

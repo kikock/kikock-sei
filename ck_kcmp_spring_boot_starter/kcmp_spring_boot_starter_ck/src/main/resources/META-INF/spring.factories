@@ -14,7 +14,7 @@ org.springframework.boot.env.EnvironmentPostProcessor=\
 # RestfulAPIConfig用api时单独使用
 # RestfulAPIConfig,\
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.kcmp.ck.spring.boot.autoconfigure.ECMPAutoConfiguration,\
+  com.kcmp.ck.spring.boot.autoconfigure.KCMPAutoConfiguration,\
   com.kcmp.ck.spring.boot.autoconfigure.ZipkinTracingConfiguration,\
   com.kcmp.ck.spring.boot.autoconfigure.JpaAutoConfiguration,\
   com.kcmp.ck.spring.boot.autoconfigure.ServiceConfig,\

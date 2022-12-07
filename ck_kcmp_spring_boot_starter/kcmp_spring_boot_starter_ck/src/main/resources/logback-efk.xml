@@ -32,7 +32,7 @@
         <!--<value>bar2</value>-->
         <!--</additionalField>-->
 
-        <!--<filter class="com.ecmp.log.LogMarkerFilter">-->
+        <!--<filter class="com.kcmp.log.LogMarkerFilter">-->
         <!--<marker>BIZ_LOG</marker>-->
         <!--<onMatch>ACCEPT</onMatch>-->
         <!--<onMismatch>NEUTRAL</onMismatch>-->

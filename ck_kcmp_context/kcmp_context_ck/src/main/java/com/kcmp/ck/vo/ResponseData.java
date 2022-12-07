@@ -202,7 +202,7 @@ public class ResponseData<T> implements Serializable {
      * @return 返回一个成功的操作状态对象
      */
     public static <Data> ResponseData<Data> operationSuccess() {
-        return new ResponseData<>(StatusEnum.SUCCESS, "ecmp_context_00001", null);
+        return new ResponseData<>(StatusEnum.SUCCESS, "kcmp_context_00001", null);
     }
 
     /**
@@ -230,7 +230,7 @@ public class ResponseData<T> implements Serializable {
      * @return 返回一个成功的操作状态对象
      */
     public static <Data> ResponseData<Data> operationSuccessWithData(Data data) {
-        ResponseData<Data> response = new ResponseData<>(StatusEnum.SUCCESS, "ecmp_context_00001", null);
+        ResponseData<Data> response = new ResponseData<>(StatusEnum.SUCCESS, "kcmp_context_00001", null);
         response.setData(data);
         return response;
     }

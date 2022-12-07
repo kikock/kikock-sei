@@ -13,17 +13,17 @@ import org.springframework.core.env.Environment;
  * 平台配置
  * @email kikock@qq.com
  **/
-public class ECMPAutoConfiguration {
+public class KCMPAutoConfiguration {
 
     @Bean
-    public BaseApplicationContext ecmpContext() {
+    public BaseApplicationContext kcmpContext() {
         return new BaseApplicationContext();
     }
 
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:/lang/ecmp-lang", "classpath:/lang/messages");
+        messageSource.setBasenames("classpath:/lang/kcmp-lang", "classpath:/lang/messages");
         messageSource.setCacheSeconds(120);
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);

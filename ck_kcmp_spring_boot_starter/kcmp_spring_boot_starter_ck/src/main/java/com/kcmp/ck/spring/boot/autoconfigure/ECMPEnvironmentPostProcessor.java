@@ -28,7 +28,7 @@ import java.util.*;
  * 全局配置处理
  * @email kikock@qq.com
  **/
-public abstract class ECMPEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered, DisposableBean {
+public abstract class KCMPEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered, DisposableBean {
     private String appId = null;
     private ZkClient zkClient = null;
 
@@ -54,8 +54,8 @@ public abstract class ECMPEnvironmentPostProcessor implements EnvironmentPostPro
 
         Properties properties = new Properties();
         try {
-            //构造ECMP默认的全局配置
-            PropertiesPropertySource propertiesPropertySource = setECMPDefaultConfig(environment, properties);
+            //构造KCMP默认的全局配置
+            PropertiesPropertySource propertiesPropertySource = setKCMPDefaultConfig(environment, properties);
 
             Set<String> localGRPCServers = new HashSet<>();
 
@@ -158,48 +158,48 @@ public abstract class ECMPEnvironmentPostProcessor implements EnvironmentPostPro
     }
 
     /**
-     * 设置ECMP默认设置
+     * 设置KCMP默认设置
      * @param environment 运行容器环境
      * @param properties  配置属性对象
      * @return 返回PropertiesPropertySource
      */
-    protected abstract PropertiesPropertySource setECMPDefaultConfig(ConfigurableEnvironment environment, Properties properties);
+    protected abstract PropertiesPropertySource setKCMPDefaultConfig(ConfigurableEnvironment environment, Properties properties);
 
     /**
-     * 初始化ECMP运行环境配置
+     * 初始化KCMP运行环境配置
      */
-    protected void initECMPEnvironment(ConfigurableEnvironment environment, Properties properties) {
+    protected void initKCMPEnvironment(ConfigurableEnvironment environment, Properties properties) {
         //是否是加载本地配置文件配置
         boolean isConfigFile = false;
         //系统环境变量
         Map<String, Object> sysEnvMap = environment.getSystemEnvironment();
         //从系统环境变量中获取APP_ID
-        appId = (String) sysEnvMap.get(ConfigConstants.ENV_ECMP_APP_ID);
-        String zkHost = (String) sysEnvMap.get(ConfigConstants.ENV_ECMP_CONFIG_CENTER);
+        appId = (String) sysEnvMap.get(ConfigConstants.ENV_KCMP_APP_ID);
+        String zkHost = (String) sysEnvMap.get(ConfigConstants.ENV_KCMP_CONFIG_CENTER);
         if (StringUtils.isNotBlank(appId) && StringUtils.isNotBlank(zkHost)) {
             isLocalConfig = false;
         } else if (StringUtils.isNotBlank(appId) && StringUtils.isBlank(zkHost)) {
-            zkHost = environment.getProperty(ConfigConstants.ENV_ECMP_CONFIG_CENTER);
+            zkHost = environment.getProperty(ConfigConstants.ENV_KCMP_CONFIG_CENTER);
             if (StringUtils.isBlank(zkHost)) {
-                throw new ExceptionInInitializerError("运行服务器没有配置系统环境变量：" + ConfigConstants.ENV_ECMP_CONFIG_CENTER);
+                throw new ExceptionInInitializerError("运行服务器没有配置系统环境变量：" + ConfigConstants.ENV_KCMP_CONFIG_CENTER);
             }
             isLocalConfig = false;
         } else if (StringUtils.isBlank(appId) && StringUtils.isNotBlank(zkHost)) {
-            appId = environment.getProperty(ConfigConstants.ENV_ECMP_APP_ID);
+            appId = environment.getProperty(ConfigConstants.ENV_KCMP_APP_ID);
             if (StringUtils.isBlank(appId)) {
-                throw new ExceptionInInitializerError("运行服务器没有配置系统环境变量：" + ConfigConstants.ENV_ECMP_APP_ID);
+                throw new ExceptionInInitializerError("运行服务器没有配置系统环境变量：" + ConfigConstants.ENV_KCMP_APP_ID);
             }
             isLocalConfig = false;
         } else {
-            appId = environment.getProperty(ConfigConstants.ENV_ECMP_APP_ID);
+            appId = environment.getProperty(ConfigConstants.ENV_KCMP_APP_ID);
             if (StringUtils.isBlank(appId)) {
                 isConfigFile = true;
-                log.warn("运行服务器没有配置系统环境变量：" + ConfigConstants.ENV_ECMP_APP_ID + "！");
+                log.warn("运行服务器没有配置系统环境变量：" + ConfigConstants.ENV_KCMP_APP_ID + "！");
             }
             if (!isConfigFile) {
-                zkHost = environment.getProperty(ConfigConstants.ENV_ECMP_CONFIG_CENTER);
+                zkHost = environment.getProperty(ConfigConstants.ENV_KCMP_CONFIG_CENTER);
                 if (StringUtils.isBlank(zkHost)) {
-                    throw new ExceptionInInitializerError("运行服务器没有配置系统环境变量：" + ConfigConstants.ENV_ECMP_CONFIG_CENTER);
+                    throw new ExceptionInInitializerError("运行服务器没有配置系统环境变量：" + ConfigConstants.ENV_KCMP_CONFIG_CENTER);
                 }
             }
             isLocalConfig = true;

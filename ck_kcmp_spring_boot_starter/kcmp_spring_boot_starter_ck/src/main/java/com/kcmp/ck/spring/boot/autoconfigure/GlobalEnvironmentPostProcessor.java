@@ -20,12 +20,12 @@ import java.util.Properties;
  * @email kikock@qq.com
  **/
 @SuppressWarnings("unchecked")
-public class GlobalEnvironmentPostProcessor extends ECMPEnvironmentPostProcessor {
+public class GlobalEnvironmentPostProcessor extends KCMPEnvironmentPostProcessor {
 
     @Override
-    public PropertiesPropertySource setECMPDefaultConfig(ConfigurableEnvironment environment, Properties properties) {
-        //初始化ECMP运行环境配置
-        initECMPEnvironment(environment, properties);
+    public PropertiesPropertySource setKCMPDefaultConfig(ConfigurableEnvironment environment, Properties properties) {
+        //初始化KCMP运行环境配置
+        initKCMPEnvironment(environment, properties);
 
         //是否是本地AppId从配置中心加载配置，以此判定是否是本地开发环境(本地开发环境运行Mock User)
         properties.setProperty("isLocalConfig", String.valueOf(isLocalConfig));
@@ -70,22 +70,22 @@ public class GlobalEnvironmentPostProcessor extends ECMPEnvironmentPostProcessor
             System.setProperty("envCode", env);
         }
         //版本
-        System.setProperty("ecmp-version", Version.getCurrentVersion());
+        System.setProperty("kcmp-version", Version.getCurrentVersion());
 
         if (!isLocalConfig &&
-                environment.getProperty("ecmp.log.efk.enable", Boolean.class, Boolean.TRUE)) {
+                environment.getProperty("kcmp.log.efk.enable", Boolean.class, Boolean.TRUE)) {
             //日志采集器
             String value;
-            Map<String, String> data = (Map<String, String>) properties.get("ECMP_FLUENTD_HOST");
+            Map<String, String> data = (Map<String, String>) properties.get("KCMP_FLUENTD_HOST");
             if (data != null && !data.isEmpty()) {
-                value = data.get("ECMP_FLUENTD_HOST");
+                value = data.get("KCMP_FLUENTD_HOST");
                 if (StringUtils.isNotBlank(value)) {
                     System.setProperty("FlentdHost", value);
                 }
             }
-            data = (Map<String, String>) properties.get("ECMP_FLUENTD_PORT");
+            data = (Map<String, String>) properties.get("KCMP_FLUENTD_PORT");
             if (data != null && !data.isEmpty()) {
-                value = data.get("ECMP_FLUENTD_PORT");
+                value = data.get("KCMP_FLUENTD_PORT");
                 if (StringUtils.isNotBlank(value)) {
                     System.setProperty("FlentdPort", value);
                 }
@@ -111,7 +111,7 @@ public class GlobalEnvironmentPostProcessor extends ECMPEnvironmentPostProcessor
 
         //Elasticsearch  http://blog.51cto.com/shangdc/2096226
 
-        return new PropertiesPropertySource("ECMP-Gloabl-Config", properties);
+        return new PropertiesPropertySource("KCMP-Gloabl-Config", properties);
     }
 
     @Override
@@ -357,7 +357,7 @@ public class GlobalEnvironmentPostProcessor extends ECMPEnvironmentPostProcessor
             properties.setProperty("spring.kafka.consumer.auto-commit-interval", "100");
             properties.setProperty("spring.kafka.consumer.auto-offset-reset", "latest");
             //properties.setProperty("spring.kafka.consumer.topic", data.get("bootstrap.servers"));
-            properties.setProperty("spring.kafka.consumer.group-id", "ecmp_notify_jx");
+            properties.setProperty("spring.kafka.consumer.group-id", "kcmp_notify_jx");
             properties.setProperty("spring.kafka.consumer.concurrency", "10");
 
             //生产者

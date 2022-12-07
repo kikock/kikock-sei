@@ -87,7 +87,7 @@ public final class OperateResult extends ResponseData<Object> implements Seriali
      * 返回一个成功的操作状态对象
      */
     public static OperateResult operationSuccess() {
-        return new OperateResult(StatusEnum.SUCCESS, "ecmp_context_00001");
+        return new OperateResult(StatusEnum.SUCCESS, "kcmp_context_00001");
     }
 
     /**

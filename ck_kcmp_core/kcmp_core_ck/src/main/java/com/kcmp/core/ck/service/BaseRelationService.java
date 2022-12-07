@@ -77,7 +77,7 @@ public abstract class BaseRelationService<T extends AbstractEntity<String> & Rel
     @Transactional
     public OperateResult insertRelations(String parentId, List<String> childIds) {
         if (childIds == null || childIds.size() == 0) {
-            return OperateResult.operationSuccess("ecmp_service_00010", 0);
+            return OperateResult.operationSuccess("kcmp_service_00010", 0);
         }
         //排除已经存在的分配关系
         List<C> children = getChildrenFromParentId(parentId);
@@ -99,7 +99,7 @@ public abstract class BaseRelationService<T extends AbstractEntity<String> & Rel
             save(relations);
         }
         //成功创建{0}个分配关系！
-        return OperateResult.operationSuccess("ecmp_service_00010", relations.size());
+        return OperateResult.operationSuccess("kcmp_service_00010", relations.size());
     }
 
 
@@ -122,7 +122,7 @@ public abstract class BaseRelationService<T extends AbstractEntity<String> & Rel
     @Transactional
     public OperateResult insertRelationsByParents(String childId, List<String> parentIds) {
         if (parentIds == null || parentIds.size() == 0) {
-            return OperateResult.operationSuccess("ecmp_service_00010", 0);
+            return OperateResult.operationSuccess("kcmp_service_00010", 0);
         }
         //排除已经存在的分配关系
         List<P> parents = getParentsFromChildId(childId);
@@ -144,7 +144,7 @@ public abstract class BaseRelationService<T extends AbstractEntity<String> & Rel
             save(relations);
         }
         //成功创建{0}个分配关系！
-        return OperateResult.operationSuccess("ecmp_service_00010", relations.size());
+        return OperateResult.operationSuccess("kcmp_service_00010", relations.size());
     }
 
     /**
@@ -156,7 +156,7 @@ public abstract class BaseRelationService<T extends AbstractEntity<String> & Rel
     @Transactional
     public OperateResult saveRelations(String parentId, List<String> childIds) {
         if (parentId == null || childIds.size() == 0) {
-            return OperateResult.operationSuccess("ecmp_service_00010", 0);
+            return OperateResult.operationSuccess("kcmp_service_00010", 0);
         }
         //获取已经分配的关系
         List<String> ids = getDao().getRelationIdsByParentId(parentId);
@@ -180,7 +180,7 @@ public abstract class BaseRelationService<T extends AbstractEntity<String> & Rel
             delete(ids);
         }
         //成功移除{0}个分配关系！
-        return OperateResult.operationSuccess("ecmp_service_00011", ids.size());
+        return OperateResult.operationSuccess("kcmp_service_00011", ids.size());
     }
 
     /**
@@ -207,7 +207,7 @@ public abstract class BaseRelationService<T extends AbstractEntity<String> & Rel
             delete(ids);
         }
         //成功移除{0}个分配关系！
-        return OperateResult.operationSuccess("ecmp_service_00011", ids.size());
+        return OperateResult.operationSuccess("kcmp_service_00011", ids.size());
     }
 
     /**

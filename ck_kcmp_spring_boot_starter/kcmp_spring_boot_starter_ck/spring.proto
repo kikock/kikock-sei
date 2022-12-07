@@ -1,8 +1,8 @@
 ﻿syntax = "proto3";
 
-package cpm.ecmp.rpc;
+package cpm.kcmp.rpc;
 
-option java_package = "com.ecmp.rpc";
+option java_package = "com.kcmp.rpc";
 option java_outer_classname = "GrpcService";
 option java_multiple_files = false;
 

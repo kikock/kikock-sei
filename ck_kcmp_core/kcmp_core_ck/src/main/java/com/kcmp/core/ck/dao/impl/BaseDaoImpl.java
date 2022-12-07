@@ -143,7 +143,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
 //                T origin = findOne(id);
 //                isNew = Objects.isNull(origin);
                 if (!existsById(id)) {
-                    throw new DataOperationDeniedException(ContextUtil.getMessage("ecmp_service_00004", id));
+                    throw new DataOperationDeniedException(ContextUtil.getMessage("kcmp_service_00004", id));
                 } else {
                     isNew = false;
                 }

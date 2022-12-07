@@ -21,7 +21,7 @@ import java.util.Random;
 public final class JwtTokenUtil {
     public static final String RANDOM_KEY = "randomKey";
 
-    private String jwtSecret = "SecretKey_ECMP";
+    private String jwtSecret = "SecretKey_KCMP";
     private Integer jwtExpiration = 36000;
 
     public String getJwtSecret() {

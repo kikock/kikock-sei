@@ -23,7 +23,7 @@ public final class Version {
 
     static {
         name = Version.class.getPackage().getImplementationTitle();
-        name = Objects.isNull(name) ? "ECMP" : name;
+        name = Objects.isNull(name) ? "KCMP" : name;
         version = Version.class.getPackage().getImplementationVersion();
         version = Objects.isNull(version) ? "dev" : version;
         fullVersion = name + " " + version;

@@ -26,11 +26,11 @@ public class GlobalParamUtil {
     /**
      * 应用服务AppId
      */
-    private final static String ECMP_APP_ID = "ECMP_APP_ID";
+    private final static String kCMP_APP_ID = "kCMP_APP_ID";
     /**
      * 云平台配置中心zookeeper服务地址
      */
-    private final static String ECMP_CONFIG_CENTER = "ECMP_CONFIG_CENTER";
+    private final static String kCMP_CONFIG_CENTER = "kCMP_CONFIG_CENTER";
     /**
      * 配置中心zookeeper的节点命名空间
      */
@@ -56,16 +56,16 @@ public class GlobalParamUtil {
             return;
         }
         runSystemEnvironments = new HashMap<>(2);
-        String appId = System.getenv(ECMP_APP_ID);
+        String appId = System.getenv(kCMP_APP_ID);
         if (Objects.isNull(appId)) {
-            throw new ExceptionInInitializerError("运行服务器没有配置系统环境变量：" + ECMP_APP_ID + "！");
+            throw new ExceptionInInitializerError("运行服务器没有配置系统环境变量：" + kCMP_APP_ID + "！");
         }
-        runSystemEnvironments.put(ECMP_APP_ID, appId);
-        String configCenterUrl = System.getenv(ECMP_CONFIG_CENTER);
+        runSystemEnvironments.put(kCMP_APP_ID, appId);
+        String configCenterUrl = System.getenv(kCMP_CONFIG_CENTER);
         if (Objects.isNull(configCenterUrl)) {
-            throw new ExceptionInInitializerError("运行服务器没有配置系统环境变量：" + ECMP_CONFIG_CENTER + "！");
+            throw new ExceptionInInitializerError("运行服务器没有配置系统环境变量：" + kCMP_CONFIG_CENTER + "！");
         }
-        runSystemEnvironments.put(ECMP_CONFIG_CENTER, configCenterUrl);
+        runSystemEnvironments.put(kCMP_CONFIG_CENTER, configCenterUrl);
     }
 
     /**
@@ -85,7 +85,7 @@ public class GlobalParamUtil {
     private static CuratorFramework getZookeeperClient() {
         CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder();
         CuratorFramework client = builder
-                .connectString(runSystemEnvironments.get(ECMP_CONFIG_CENTER))
+                .connectString(runSystemEnvironments.get(kCMP_CONFIG_CENTER))
                 .sessionTimeoutMs(5000)
                 .connectionTimeoutMs(5000)
                 .canBeReadOnly(true)
@@ -102,7 +102,7 @@ public class GlobalParamUtil {
      */
    public static void startZookeeperWatcher() {
         //应用服务的配置节点
-        String path = String.format("/%s", runSystemEnvironments.get(ECMP_APP_ID));
+        String path = String.format("/%s", runSystemEnvironments.get(kCMP_APP_ID));
         try {
             CuratorFramework client = getZookeeperClient();
             // Node watcher 监听nodeChanged事件

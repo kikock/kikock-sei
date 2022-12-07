@@ -115,7 +115,7 @@ public class BaseContextSupport extends BaseApplicationContext {
      * @return 返回当前应用标识。
      */
     public static String getAppId() {
-        return getGlobalProperty(ConfigConstants.ENV_ECMP_APP_ID);
+        return getGlobalProperty(ConfigConstants.ENV_KCMP_APP_ID);
     }
 
     /**

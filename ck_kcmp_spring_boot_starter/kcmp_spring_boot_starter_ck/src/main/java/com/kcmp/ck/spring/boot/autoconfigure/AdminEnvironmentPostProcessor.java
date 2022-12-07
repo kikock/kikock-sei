@@ -52,7 +52,7 @@ public class AdminEnvironmentPostProcessor implements EnvironmentPostProcessor {
             properties.setProperty("spring.boot.admin.client.enabled", "false");
         }
 
-        PropertiesPropertySource propertiesPropertySource = new PropertiesPropertySource("ECMP-Admin-Config", properties);
+        PropertiesPropertySource propertiesPropertySource = new PropertiesPropertySource("KCMP-Admin-Config", properties);
         environment.getPropertySources().addFirst(propertiesPropertySource);
     }
 

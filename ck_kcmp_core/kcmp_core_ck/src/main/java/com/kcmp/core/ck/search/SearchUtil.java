@@ -72,7 +72,7 @@ public class SearchUtil {
             String[] names = StringUtils.split(key, "_");
             if (names.length != 2) {
                 //查询参数错误
-                throw new IllegalArgumentException(ContextUtil.getMessage("ecmp_web_00001", key));
+                throw new IllegalArgumentException(ContextUtil.getMessage("kcmp_web_00001", key));
             }
             String filedName = names[1];
             SearchFilter.Operator operator = SearchFilter.Operator.valueOf(names[0]);

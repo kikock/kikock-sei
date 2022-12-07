@@ -10,16 +10,16 @@ import org.aspectj.lang.annotation.Pointcut;
 public class Pointcuts {
 
     /**
-     * com.ecmp包下public方法的任意连接点
+     * com.kcmp包下public方法的任意连接点
      */
-    @Pointcut("execution(public * com.ecmp..*.*(..)))")
-    public void ecmpPointcut() {
+    @Pointcut("execution(public * com.kcmp..*.*(..)))")
+    public void kcmpPointcut() {
     }
 
     /**
      * 实现了 BaseService 接口/类的目标对象的任意连接点（在Spring AOP中只是方法执行）
      */
-    @Pointcut("target(com.ecmp.core.jx.service.BaseService)")
+    @Pointcut("target(com.kcmp.core.jx.service.BaseService)")
     public void baseServicePointcut() {
     }
 
@@ -54,14 +54,14 @@ public class Pointcuts {
     /**
      * 逻辑层异常日志切入点.
      */
-    @Pointcut("ecmpPointcut() && (baseServicePointcut() || componentPointcut() || servicePointcut())")
+    @Pointcut("kcmpPointcut() && (baseServicePointcut() || componentPointcut() || servicePointcut())")
     public void loggerPointcut() {
     }
 
     /**
      * 接口层重复操作切入点.
      */
-    @Pointcut("ecmpPointcut() && apiPointcut()")
+    @Pointcut("kcmpPointcut() && apiPointcut()")
     public void loggerReCommitPointcut() {
     }
 }

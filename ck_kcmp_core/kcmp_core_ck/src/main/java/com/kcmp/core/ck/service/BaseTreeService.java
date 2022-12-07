@@ -82,7 +82,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                     str.setLength(0);
                 } else {
                     // error
-                    return OperateResultWithData.operationFailureWithData(entity, "ecmp_service_00005");
+                    return OperateResultWithData.operationFailureWithData(entity, "kcmp_service_00005");
                 }
             }
 
@@ -93,11 +93,11 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                 if (Objects.nonNull(origin)) {
                     //验证当前parentId是否与原parentId相同,用以控制不允许修改父节点操作
                     if (!StringUtils.equalsAny(origin.getParentId(), parentId, null, "")) {
-                        return OperateResultWithData.operationFailureWithData(entity, "ecmp_service_00006");
+                        return OperateResultWithData.operationFailureWithData(entity, "kcmp_service_00006");
                     }
                 } else {
                     //未找到原始数据
-                    return OperateResultWithData.operationFailureWithData(entity, "ecmp_service_00004");
+                    return OperateResultWithData.operationFailureWithData(entity, "kcmp_service_00004");
                 }
 
                 //检查是否修改代码和名称，以便同步更新子节点的路径
@@ -122,9 +122,9 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
             }
 
             if (isNew) {
-                operateResultWithData = OperateResultWithData.operationSuccessWithData(entity, "ecmp_service_00001");
+                operateResultWithData = OperateResultWithData.operationSuccessWithData(entity, "kcmp_service_00001");
             } else {
-                operateResultWithData = OperateResultWithData.operationSuccessWithData(entity, "ecmp_service_00002");
+                operateResultWithData = OperateResultWithData.operationSuccessWithData(entity, "kcmp_service_00002");
             }
         }
         return operateResultWithData;
@@ -152,12 +152,12 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                 List<T> childrenList = getChildrenNodesNoneOwn(id);
                 if (CollectionUtils.isEmpty(childrenList)) {
                     getDao().delete(entity);
-                    return OperateResult.operationSuccess("ecmp_service_00003");
+                    return OperateResult.operationSuccess("kcmp_service_00003");
                 } else {
-                    return OperateResult.operationFailure("ecmp_service_00007");
+                    return OperateResult.operationFailure("kcmp_service_00007");
                 }
             } else {
-                return OperateResult.operationWarning("ecmp_service_00004");
+                return OperateResult.operationWarning("kcmp_service_00004");
             }
         } else {
             return operateResult;
@@ -186,16 +186,16 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
      */
     public OperateResult move(String nodeId, String targetParentId) {
         if (StringUtils.isBlank(nodeId)) {
-            return OperateResult.operationFailure("ecmp_service_00008", "当前节点ID");
+            return OperateResult.operationFailure("kcmp_service_00008", "当前节点ID");
         }
         if (StringUtils.isBlank(targetParentId)) {
-            return OperateResult.operationFailure("ecmp_service_00008", "目标父节点ID");
+            return OperateResult.operationFailure("kcmp_service_00008", "目标父节点ID");
         }
 
         //获取当前节点
         T currentNode = findOne(nodeId);
         if (Objects.isNull(currentNode)) {
-            return OperateResult.operationWarning("ecmp_service_00004");
+            return OperateResult.operationWarning("kcmp_service_00004");
         }
         OperateResult operateResult;
         //当前节点的父节点
@@ -208,7 +208,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
         if (Objects.nonNull(targetParent)) {
             //检查当前父id与目标父id是否不同，如果相同不执行移动
             if (Objects.nonNull(currentParent) && StringUtils.equals(currentParent.getId(), targetParent.getId())) {
-                return OperateResult.operationSuccess("ecmp_service_00015");
+                return OperateResult.operationSuccess("kcmp_service_00015");
             }
             int parentNodeLevel = 0;
             String parentCodePath = "";
@@ -244,9 +244,9 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                     getDao().save(item);
                 }
             }
-            operateResult = OperateResult.operationSuccess("ecmp_service_00009");
+            operateResult = OperateResult.operationSuccess("kcmp_service_00009");
         } else {
-            operateResult = OperateResult.operationWarning("ecmp_service_00004");
+            operateResult = OperateResult.operationWarning("kcmp_service_00004");
         }
         return operateResult;
     }

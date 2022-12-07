@@ -20,7 +20,7 @@ public class ZookeeperConfig {
     private String zkHost;
 
     @Bean
-    public BaseApplicationContext ecmpContext() {
+    public BaseApplicationContext kcmpContext() {
         return new BaseApplicationContext();
     }
 

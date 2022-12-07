@@ -1,6 +1,6 @@
 package com.kcmp.ck.spring.boot.autoconfigure;
 
-import com.ecmp.core.jx.service.MonitorService;
+import com.kcmp.core.jx.service.MonitorService;
 import com.kcmp.ck.spring.boot.aop.ServiceLogCollection;
 import org.springframework.context.annotation.Bean;
 

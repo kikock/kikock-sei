@@ -15,11 +15,11 @@ public abstract class ConfigConstants {
     /**
      * 应用服务AppId
      */
-    public static final String ENV_ECMP_APP_ID = "ECMP_APP_ID";
+    public static final String ENV_KCMP_APP_ID = "KCMP_APP_ID";
     /**
      * 云平台配置中心zookeeper服务地址
      */
-    public static final String ENV_ECMP_CONFIG_CENTER = "ECMP_CONFIG_CENTER";
+    public static final String ENV_KCMP_CONFIG_CENTER = "KCMP_CONFIG_CENTER";
     /**
      * 配置中心zookeeper的节点命名空间
      */
@@ -58,12 +58,12 @@ public abstract class ConfigConstants {
     /**
      * 全局配置参数key，会话缓存相关配置
      */
-    public static final String PARAM_SESSION_CACHE = "ECMP_SESSION_CACHE";
+    public static final String PARAM_SESSION_CACHE = "KCMP_SESSION_CACHE";
     /**
      * 全局配置参数key，EDM_MONGODB相关配置
      */
     public static final String PARAM_EDM_MONGODB = "EDM_MONGODB";
-    public static final String SWITCH_EDM_KEY = "com.ecmp.edm.jx.enable";
+    public static final String SWITCH_EDM_KEY = "com.kcmp.edm.jx.enable";
     /**
      * 全局配置参数key，ELASTIC_SEARCH相关配置
      */

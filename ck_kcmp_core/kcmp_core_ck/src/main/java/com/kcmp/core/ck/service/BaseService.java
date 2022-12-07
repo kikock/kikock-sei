@@ -56,7 +56,7 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
      * @param entity 待创建数据对象
      */
     protected OperateResultWithData<T> preInsert(T entity) {
-        return OperateResultWithData.operationSuccessWithData(entity, "ecmp_service_00003");
+        return OperateResultWithData.operationSuccessWithData(entity, "kcmp_service_00003");
     }
 
     /**
@@ -64,7 +64,7 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
      * @param entity 待更新数据对象
      */
     protected OperateResultWithData<T> preUpdate(T entity) {
-        return OperateResultWithData.operationSuccessWithData(entity, "ecmp_service_00003");
+        return OperateResultWithData.operationSuccessWithData(entity, "kcmp_service_00003");
     }
 
     /**
@@ -72,7 +72,7 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
      * @param id 待删除数据对象主键
      */
     protected OperateResult preDelete(ID id) {
-        return OperateResult.operationSuccess("ecmp_service_00003");
+        return OperateResult.operationSuccess("kcmp_service_00003");
     }
 
     /**
@@ -101,9 +101,9 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
                 logger.debug("Saved entity id is {}", entity.getId());
             }
             if (isNew) {
-                operateResultWithData = OperateResultWithData.operationSuccessWithData(saveEntity, "ecmp_service_00001");
+                operateResultWithData = OperateResultWithData.operationSuccessWithData(saveEntity, "kcmp_service_00001");
             } else {
-                operateResultWithData = OperateResultWithData.operationSuccessWithData(saveEntity, "ecmp_service_00002");
+                operateResultWithData = OperateResultWithData.operationSuccessWithData(saveEntity, "kcmp_service_00002");
             }
         }
         return operateResultWithData;
@@ -185,9 +185,9 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
             T entity = findOne(id);
             if (entity != null) {
                 getDao().delete(entity);
-                return OperateResult.operationSuccess("ecmp_service_00003");
+                return OperateResult.operationSuccess("kcmp_service_00003");
             } else {
-                return OperateResult.operationWarning("ecmp_service_00004");
+                return OperateResult.operationWarning("kcmp_service_00004");
             }
         }
         return operateResult;
