@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <th:block th:include="include :: header('应用服务')"/>
+    <!--    ui布局插件-->
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: layout-latest-js"/>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content fadeInRight">
+    <div class="col-sm-4">
+        <div class="row">
+            <div class="btn-group-sm" id="runToolbar">
+                <h3>
+                    运行环境
+                </h3>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="runEnvironment-table"></table>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="row">
+            <div class="btn-group-sm" id="toolbar">
+                <h3>
+                    应用服务
+                </h3>
+                <div class="select-list">
+                    <a class="btn btn-success" onclick="addModule()" >
+                        <i class="fa fa-plus"></i> 新增
+                    </a>
+                    <a class="btn btn-warning" onclick="distribute()">
+                        <i class="fa fa-upload"></i> 发布
+                    </a>
+
+                    <form id="post-form">
+                        <div class="select-list">
+                            <input id="runtimeEnvironmentId" name="runtimeEnvironmentId" type="hidden"
+                                   th:value="${runtimeEnvironment.id}"/>
+                            <ul>
+                                <li>
+                                    名称：<input type="text" name="name"/>
+                                </li>
+                                <li>
+                                    <label class="font-noraml">系统平台</label>
+                                </li>
+                                <li>
+                                    <select id="platformId" name="platformId" class="form-control"
+                                            th:with="type=${platforms}"
+                                            onchange="$.table.search()">
+                                        <option th:each="data : ${type}" th:text="${data.name}"
+                                                th:value="${data.id}"></option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                            class="fa fa-search"></i>&nbsp;搜索</a>
+                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                            class="fa fa-refresh"></i>&nbsp;重置</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    // 调用地址
+    var runPrefix = ctx + "web/runEnvironment";
+    var prefix = ctx + "web/application";
+    $(function () {
+        var runOptions = {
+            id: "runEnvironment-table",
+            toolbar: "runToolbar",
+            url: runPrefix + "/listAll",
+            sidePagination: "client", //客户点分页
+            striped: true,
+            clickToSelect: true,
+            showSearch: false,
+            showRefresh: false,
+            showColumns: false,
+            showToggle: false,
+            sortName: "id",
+            uniqueId: "id",
+            modalName: "平台",
+            onClickRow: onClickRowRunEnvironment,
+            columns: [
+                {
+                    field: 'name',
+                    title: '名称',
+                    sortable: true
+                },
+                {
+                    field: 'code',
+                    title: '代码',
+                    sortable: true
+                }
+            ]
+        };
+
+        var options = {
+            url: prefix + "/listAll",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            sidePagination: "client",
+            showSearch: false,
+            popModalWidth: 800,
+            popModalHeight: 400,
+            sortName: "id",
+            uniqueId: "id",
+            modalName: "应用服务",
+            columns: [
+                {
+                    checkbox: true
+                },
+                {
+                    field: 'applicationModule.name',
+                    title: '应用模块',
+                    sortable: true
+                },
+                {
+                    field: 'remark',
+                    title: '应用模块说明',
+                    sortable: true
+                },
+                {
+                    field: 'apiDocsUrl',
+                    title: 'API文档地址',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(runOptions);
+        $.table.init(options);
+    });
+
+
+    function onClickRowRunEnvironment(row) {
+        $("#runtimeEnvironmentId").val(row.id); //设置URL
+        $.table.search("post-form", "bootstrap-table")
+    }
+    //弹出添加应用服务
+    function addModule() {
+        // 添加模块  获取筛选的平台id
+        let platformId = $.form.selectSelects("platformId");
+        let runtimeEnvironmentId =$("#runtimeEnvironmentId").val();
+        var url = prefix + "/add/" + platformId + "/" + runtimeEnvironmentId;
+        $.modal.open("添加应用服务", url);
+    }
+    //发布服务
+    function distribute() {
+        // 发布页面
+        var url = prefix + "/distribute";
+        table.set();
+        var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确认要发布选中的" + rows.length + "条数据吗?", function () {
+            var data = {"ids": rows.join()};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
+
+</script>
+</body>
+</html>
+

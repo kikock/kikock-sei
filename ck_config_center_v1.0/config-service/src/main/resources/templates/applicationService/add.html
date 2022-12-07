@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:display="http://www.w3.org/1999/xhtml" lang="zh">
+<head>
+    <th:block th:include="include :: header('新增应用服务')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-module-add">
+        <input id="platformId" name="platformId"   type="hidden"   th:value="${platformId}"/>
+        <input id="runtimeEnvironmentId" name="runtimeEnvironmentId"  type="hidden"    th:value="${runtimeEnvironmentId}"/>
+<!--        <input id="platformId" name="platformId" type="hidden"   th:value="${platformId}"/>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">应用标识：</label>
+            <div class="input-group col-sm-8" style="padding-left: 15px;  padding-right: 95px;"  >
+                <input type="text" class="form-control"  name="appId" id="appId"  required   >
+                <span class="input-group-btn">  <button  type="button" class="btn btn-primary" onclick="generateUUID()">生成应用标识</button> </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">应用模块：</label>
+            <div class="col-sm-8" style="padding-right: 95px;">
+                <select id="applicationModuleId" name="applicationModuleId" class="form-control"
+                        th:with="type=${platformModule}"   >
+                    <option th:each="data : ${type}" th:text="${data.name}"
+                            th:value="${data.id}"></option>
+                </select>
+            </div>
+        </div>
+            <div class="form-group"  >
+                <label class="col-sm-3 control-label is-required">应用模块说明：</label>
+                <div class="col-sm-8" style="padding-right: 95px;">
+                    <textarea id="remark" name="remark" class="form-control" required style="resize:none;"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">
+                    API文档地址：</label>
+                <div class="col-sm-8"  style="padding-right: 95px;"  >
+                    <textarea id="apiDocsUrl" name="apiDocsUrl" class="form-control" required style="resize:none;"></textarea>
+                </div>
+            </div>
+
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    // 调用地址
+    var prefix = ctx + "web/application";
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-module-add').serialize());
+        }
+    }
+    function generateUUID() {
+        var d = new Date().getTime();
+        if (window.performance && typeof window.performance.now === "function") {
+            d += performance.now(); //use high-precision timer if available
+        }
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = (d + Math.random() * 16) % 16 | 0;
+            d = Math.floor(d / 16);
+            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+       $("#appId").val(uuid);
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <th:block th:include="include :: header('编号生成器')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="addModule()">
+                <i class="fa fa-plus"></i> 新增
+            </a>
+            <a class="btn btn-success" onclick="clearCache()">
+                <i class="fa fa-remove"></i> 删除并清除缓存
+            </a>
+            <a class="btn btn-success" onclick="initCacheNum()">
+                <i class="fa fa-cloud-upload"></i> 初始化序号
+            </a>
+
+            <form id="post-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            关键字：<input type="text" name="name"/>
+                        </li>
+                        <li>
+                            <label class="font-noraml">运行环境</label>
+                        </li>
+                        <li>
+                            <select id="envCode" name="envCode" class="form-control"
+                                    th:with="type=${runtimeEnvironment}"
+                                    onchange="$.table.search()">
+                                <option th:each="data : ${type}" th:text="${data.name}"
+                                        th:value="${data.code}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    // 调用地址
+    var prefix = ctx + "web/serialNumberConfig";
+
+
+    $(function () {
+        var options = {
+            url: prefix + "/listAll",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            showSearch: false,
+            sidePagination: "client",
+            popModalWidth: 600,
+            popModalHeight: 400,
+            sortName: "id",
+            uniqueId: "id",
+            modalName: "编号生成器",
+            columns: [
+                {
+                    checkbox: true
+                },
+                {
+                    field: 'envCode',
+                    title: '运行环境代码',
+                    sortable: true
+                },
+                {
+                    field: 'entityClassName',
+                    title: '实体类名称(全名)',
+                    sortable: true
+                },
+                {
+                    field: 'name',
+                    title: '实体名称',
+                    sortable: true
+                },
+                {
+                    field: 'prefixes',
+                    title: '编号前缀',
+                    sortable: true
+                },
+                {
+                    field: 'length',
+                    title: '编号长度',
+                    sortable: true
+                },
+                {
+                    field: 'initialSerial',
+                    title: '初始序号',
+                    sortable: true
+                },
+                {
+                    field: 'currentSerial',
+                    title: '当前序号',
+                    sortable: true
+                },
+                {
+                    field: 'currentNumber',
+                    title: '当前编号',
+                    sortable: true
+                },
+                {
+                    field: 'isolationCode',
+                    title: '隔离码',
+                    sortable: true
+                },
+                {
+                    field: 'noLeadingZero',
+                    title: '是否补零',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+
+    function addModule() {
+        let envCode = $.form.selectSelects("envCode");
+        // 添加模块  获取筛选的平台id
+        var url = prefix + "/add/" + envCode;
+        $.modal.open("添加编号生成器", url);
+    }
+
+
+    function clearCache() {
+        // 发布页面
+        var clearCacheUrl = prefix + "/clearConfigCache";
+        table.set();
+        var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        var data = {"ids": rows.join()};
+
+        $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function () {
+            $.operate.post(clearCacheUrl,data);
+        });
+    }
+
+    function initCacheNum() {
+        // 发布页面
+        var url = prefix + "/getConfigKey";
+        table.set();
+        var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+        if (rows.length != 1) {
+            $.modal.alertWarning("请选择一条记录");
+            return;
+        }
+        $.modal.confirm("确认要初始化选中的" + rows.length + "条数据吗?", function () {
+            var data = {"ids": rows.join()};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
+</script>
+</body>
+</html>
+
+
+
+
+
+

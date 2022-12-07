@@ -1,0 +1,7 @@
+rootProject.name = 'ck_config_center_v1.0'
+include 'config-admin'
+include 'config-entity'
+include 'config-context'
+include 'config-dao'
+include 'config-service'
+

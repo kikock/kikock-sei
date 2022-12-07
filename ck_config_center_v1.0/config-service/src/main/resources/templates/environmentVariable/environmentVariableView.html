@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <th:block th:include="include :: header('环境变量')"/>
+    <!--    ui布局插件-->
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: layout-latest-js"/>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content fadeInRight">
+    <div class="col-sm-2">
+        <div class="row">
+            <div class="btn-group-sm" id="runToolbar">
+                <h3>
+                    运行环境
+                </h3>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="runEnvironment-table"></table>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-10">
+        <div class="row">
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="addModule()">
+                    <i class="fa fa-plus"></i> 新增
+                </a>
+                <form id="post-form">
+                    <input id="runtimeEnvironmentId" name="runtimeEnvironmentId"
+                           th:value="${runtimeEnvironment.id}"/>
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                关键字：<input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <label class="font-noraml">参数类型:</label>
+                            </li>
+                            <li>
+                                <select class="form-control" id="platformParam" name="platformParam" onchange="paramType()">
+                                    <option value="true" selected>平台</option>
+                                    <option value="false">应用</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label class="font-noraml">系统平台</label>
+                            </li>
+                            <li>
+                                <select id="platformId" name="platformId" class="form-control"
+                                        th:with="type=${platforms}">
+                                    <option th:each="data : ${type}" th:text="${data.name}"
+                                            th:value="${data.id}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label id="moduleName"  class="font-noraml">应用模块</label>
+                            </li>
+                            <li>
+                                <select id="moduleId" name="moduleId" class="form-control">
+
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchparam()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    // 调用地址
+    var runPrefix = ctx + "web/runEnvironment";
+    var prefix = ctx + "web/environmentVariable";
+    $(function () {
+        //默认隐藏
+        $('#moduleId').hide();
+        $('#moduleName').hide();
+
+        var runOptions = {
+            id: "runEnvironment-table",
+            toolbar: "runToolbar",
+            url: runPrefix + "/listAll",
+            sidePagination: "client", //客户点分页
+            striped: false,
+            clickToSelect: true,
+            singleSelect:true,
+            showSearch: false,
+            showRefresh: false,
+            showColumns: false,
+            showToggle: false,
+            sortName: "id",
+            uniqueId: "id",
+            modalName: "平台",
+            onClickRow: onClickRowRunEnvironment,
+            onLoadSuccess: onLoadSuccessRunEnvironment,
+            columns: [
+                {
+                    field: 'name',
+                    title: '名称',
+                    sortable: true
+                },
+                {
+                    field: 'code',
+                    title: '代码',
+                    sortable: true
+                }
+            ]
+        };
+
+        var options = {
+            url: prefix + "/listAllBySearch",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            sidePagination: "client",
+            showSearch: false,
+            popModalWidth: 800,
+            popModalHeight: 400,
+            sortName: "id",
+            uniqueId: "id",
+            modalName: "环境变量",
+            columns: [
+                {
+                    checkbox: true
+                },
+                {
+                    field: 'name',
+                    title: '名称',
+                    sortable: true
+                },
+                {
+                    field: 'code',
+                    title: '代码',
+                    sortable: true
+                },
+                {
+                    field: 'configValue',
+                    title: '配置值',
+                    sortable: true
+                },
+                {
+                    field: 'yxhj',
+                    title: '运行环境',
+                    formatter: function (value, row, index) {
+                        return "运行环境";
+                    }
+                },
+                {
+                    field: 'xtpt',
+                    title: '系统平台',
+                    formatter: function (value, row, index) {
+                        return "系统平台";
+                    }
+                },
+                {
+                    field: 'yymk',
+                    title: '应用模块',
+                    formatter: function (value, row, index) {
+                        return "应用模块";
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(runOptions);
+
+
+        $.table.init(options);
+    });
+
+
+    function onClickRowRunEnvironment(row) {
+        $("#runtimeEnvironmentId").val(row.id); //设置URL
+        let affectedRowIds = $.table.affectedRowIds(row);
+        console.log(affectedRowIds[0]);
+        $.table.search("post-form", "bootstrap-table")
+    }
+    function onLoadSuccessRunEnvironment(data) {
+            console.log(data);
+    }
+
+    //弹出添加环境变量
+    function addModule() {
+        // 添加模块  获取筛选的平台id
+        let platformId = $.form.selectSelects("platformId");
+        let runtimeEnvironmentId =$("#runtimeEnvironmentId").val();
+        var url = prefix + "/add/" + platformId + "/" + runtimeEnvironmentId;
+        $.modal.open("添加环境变量", url);
+    }
+
+
+    function paramType() {
+        var ind = document.getElementById("platformParam").selectedIndex;
+        var platformId = $("#platformId").val();
+        console.log(platformId);
+        if (ind === 1) {
+            //平台禁止选择
+            $('#platformId').attr("disabled", true);
+            var url =  ctx + "web/module/listPlatformModule";
+            var data ={platformId : platformId};
+            //显示应用
+            $('#moduleName').show();
+            $('#moduleId').show();
+            //加载应用数据
+            getBaseOptionFun("moduleId",url,data);
+
+
+        } else {
+            //删除应用数据
+            $("#moduleId").empty();
+            //平台可选择
+            $('#platformId').attr("disabled",false);
+            //隐藏应用数据
+            $('#moduleName').hide();
+            $('#moduleId').hide();
+        }
+    }
+    function getBaseOptionFun(selectId,url,data){
+        $("#" + selectId + "").empty();
+        $.ajax({
+            url: url,
+            type: "POST",
+            data:data,
+            async : false,
+            success: function (result) {
+                var rows =result.rows;
+                if(rows!= "" && rows!= null){
+                    for(let i = 0; i < rows.length; i++){
+                        $("#" + selectId + "").append("<option value='"+rows[i].id+"'>"+rows[i].name+"</option>");//新增
+                    }
+                    $("#"+selectId+" option:eq(0)").attr('selected', 'selected');//选中第一个
+                }
+            },
+            fail: function (status) {
+                // 此处放失败后执行的代码
+            }
+        });
+    }
+    function searchparam() {
+        $('#platformId').attr("disabled",false);
+        $.table.search();
+        $('#platformId').attr("disabled",true);
+    }
+
+</script>
+</body>
+</html>
+

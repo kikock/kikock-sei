@@ -1,0 +1,82 @@
+// java编译的时候缺省状态下会因为中文字符而失败
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+dependencies {
+    compile(
+            "org.springframework:spring-beans:${springVersion}",
+            "org.springframework:spring-context:${springVersion}",
+//            cxf
+            "org.apache.cxf:cxf-rt-rs-client:${cxf_client_version}",
+            "org.slf4j:slf4j-log4j12:${slf4j_version}",
+            "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}",
+            "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:${jackson_version}",
+            'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.9.0',
+            'com.fasterxml.uuid:java-uuid-generator:4.0.1',
+    )
+    compile(
+            'io.jsonwebtoken:jjwt:0.9.0',
+            'com.squareup.okhttp3:okhttp:4.9.3',
+//             'com.squareup.okio:okio:1.12.0',
+            'io.zipkin.brave:brave-instrumentation-jaxrs2:4.7.2',
+            'io.zipkin.brave:brave-instrumentation-http:5.13.8',
+            'io.zipkin.brave:brave:5.13.8',
+            //jodd工具 集合
+            'org.jodd:jodd-core:3.5',
+            'commons-io:commons-io:2.11.0',
+            'commons-codec:commons-codec:1.15',
+            'commons-beanutils:commons-beanutils:1.9.4',
+            'org.apache.commons:commons-lang3:3.12.0',
+            'org.apache.curator:curator-framework:4.0.0',
+            'org.apache.curator:curator-recipes:4.0.0',
+            'org.apache.curator:curator-x-discovery:4.0.0',
+            'org.apache.curator:curator-test:4.0.0',
+    )
+    testCompile(
+            "junit:junit:${junit_version}",
+    )
+}
+
+
+
+/////////////////////////////////////上传Maven仓库 开始////////////////////////////////////////
+//打包
+jar {
+    manifest {
+        attributes("Implementation-Title": "kcmp-config-context")
+        attributes("Build-Time": new Date().format("yyyy-MM-dd HH:mm:ss"))
+    }
+}
+//打包源代码
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+//如果希望gradle install，安装到.m2本地仓库，参考下面的内容
+install {
+    repositories.mavenInstaller {
+        pom.version = "$project.version"
+        pom.artifactId = "$project.name"
+        pom.groupId = "$project.group"
+    }
+}
+
+//上传到nexus
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: MAVEN_REPO_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+            pom.version = "$project.version"
+            pom.artifactId = "$project.name"
+            pom.groupId = "$project.group"
+        }
+    }
+    return 'Success'
+}
+
+/////////////////////////////////////上传Maven仓库  结束////////////////////////////////////////
