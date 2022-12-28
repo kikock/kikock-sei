@@ -11,13 +11,16 @@ import com.kcmp.ck.config.entity.GlobalParamConfig;
 import com.kcmp.ck.config.entity.Platform;
 import com.kcmp.ck.config.entity.RuntimeEnvironment;
 import com.kcmp.ck.config.entity.dto.GlobalParamConfigSearch;
+import com.kcmp.ck.config.entity.dto.OperateResult;
 import com.kcmp.ck.config.entity.vo.OperateResultVo;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -92,18 +95,44 @@ public class GlobalParamConfigController {
     }
 
 
-    //
-    // /**
-    //  * 删除一个全局参数
-    //  * @param id 全局参数的Id标识
-    //  * @return 操作结果
-    //  */
-    // @ResponseBody
-    // @RequestMapping("/delete")
-    // public OperateResultVo delete(String id) {
-    //     GlobalParamConfigService client = JAXRSClientFactory.create(ServletApplication.apiBaseAddress, GlobalParamConfigService.class, Arrays.asList(new JacksonJsonProvider()));
-    //     return new OperateResultVo(client.delete(id));
-    // }
+
+    /**
+     * 删除一个全局参数
+     * @param ids 全局参数的Id标识
+     * @return 操作结果
+     */
+    @ResponseBody
+    @RequestMapping("/remove")
+    public OperateResultVo delete(String ids) {
+        return new OperateResultVo(service.remove(ids));
+    }
+    /**
+     * 修改运行环境
+     */
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") String id, ModelMap mmap) {
+        GlobalParamConfig one = service.findOne(id);
+        mmap.put("globalParamConfig", one);
+        mmap.put("platformParam",true);
+        if(StringUtils.isNotBlank(one.getApplicationModuleId())) {
+            //模块参数
+            List<ApplicationModule> modules = applicationModuleService.getPlatformModule(one.getPlatformId());
+            mmap.put("platformParam",false);
+            mmap.put("modules", modules);
+        }
+        return "globalParamConfig/edit";
+    }
+
+    /**mmap = {BindingAwareModelMap@20495}  size = 1
+     * 修改运行环境
+     */
+
+    @PostMapping("/edit")
+    @ResponseBody
+    public OperateResultVo editSave(GlobalParamConfig globalParamConfig) {
+        return new OperateResultVo(service.save(globalParamConfig));
+    }
+
     //
     // /**
     //  * 获取平台中可以引用的全局参数键和说明

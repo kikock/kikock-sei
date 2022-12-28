@@ -176,6 +176,7 @@ public abstract class KCMPEnvironmentPostProcessor implements EnvironmentPostPro
         //从系统环境变量中获取APP_ID
         appId = (String) sysEnvMap.get(ConfigConstants.ENV_KCMP_APP_ID);
         String zkHost = (String) sysEnvMap.get(ConfigConstants.ENV_KCMP_CONFIG_CENTER);
+        //TODO 环境变量读取
         if (StringUtils.isNotBlank(appId) && StringUtils.isNotBlank(zkHost)) {
             isLocalConfig = false;
         } else if (StringUtils.isNotBlank(appId) && StringUtils.isBlank(zkHost)) {
@@ -199,12 +200,14 @@ public abstract class KCMPEnvironmentPostProcessor implements EnvironmentPostPro
             if (!isConfigFile) {
                 zkHost = environment.getProperty(ConfigConstants.ENV_KCMP_CONFIG_CENTER);
                 if (StringUtils.isBlank(zkHost)) {
+                    log.warn("运行服务器没有配置系统环境变量：" + ConfigConstants.ENV_KCMP_CONFIG_CENTER + "！");
                     throw new ExceptionInInitializerError("运行服务器没有配置系统环境变量：" + ConfigConstants.ENV_KCMP_CONFIG_CENTER);
                 }
             }
             isLocalConfig = true;
         }
-
+        System.out.println("读取配置中心zookeeper地址:" + ConfigConstants.ENV_KCMP_CONFIG_CENTER + "="+zkHost+",配置应用id"+ConfigConstants.ENV_KCMP_APP_ID+
+                "="+appId);
         properties.put("isConfigFile", isConfigFile);
 
         if (!isConfigFile) {

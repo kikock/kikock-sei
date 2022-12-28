@@ -38,13 +38,13 @@ public class Signature {
 
     public static void main(String[] args) throws Exception {
         String key = "noMobile";
-        String userLoginID = "tj111222";
+        String userLoginID = "ck111222";
         String stamp = "1634983245679";
         String token = "c9187046e6734072ee43e7872e1cf13b3deae741";
         String sha1Token = sign(key + userLoginID + stamp);
         System.out.println(token.equals(sha1Token));
 
-        String account = "JX\\test001";
+        String account = "ck\\test001";
         int idx = account.indexOf("\\");
         account = account.substring(idx + 1);
         System.out.println(account);

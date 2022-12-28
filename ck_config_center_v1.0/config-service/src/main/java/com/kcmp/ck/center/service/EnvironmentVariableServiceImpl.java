@@ -175,8 +175,11 @@ public class EnvironmentVariableServiceImpl implements EnvironmentVariableServic
     public List<EnvVarConfig> findBySearch(EnvVarConfigSearch search) {
         //获取配置值清单
         List<EnvironmentVarConfig> varConfigs;
+        //平台id
         String platformId = search.getPlatformId();
+        //运行环境id
         String runtimeEnvId = search.getRuntimeEnvironmentId();
+        //应用id
         String applicationModuleId = search.getApplicationModuleId();
         //判断是否为平台级配置
         if (search.isPlatformParam()) {

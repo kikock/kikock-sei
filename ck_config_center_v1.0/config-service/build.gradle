@@ -41,12 +41,15 @@ dependencies {
             "de.codecentric:spring-boot-admin-starter-client:${springBootAdmin}",
             "org.webjars:swagger-ui:${swagger_version}",
             "org.apache.cxf:cxf-rt-rs-service-description-swagger:${cxf_spring_boot_version}",
-            "org.springframework.kafka:spring-kafka:${spring_kafka_version}"
+            "org.springframework.kafka:spring-kafka:${spring_kafka_version}",
+            "org.apache.zookeeper:zookeeper:${zookeeper_version}"
     )
 
     //谷歌工具包
     compile 'com.google.guava:guava:31.1-jre'
-    compile("org.apache.curator:curator-recipes:${curator_version}") { exclude group: 'log4j' }
+    compile("org.apache.curator:curator-recipes:${curator_version}")
+            { exclude group: 'log4j'
+              exclude group: 'org.apache.zookeeper'}
     compile "ch.qos.logback:logback-classic:1.2.3"
     compile 'org.fluentd:fluent-logger:0.3.3'
     compile 'com.sndyuk:logback-more-appenders:1.4.3'

@@ -13,9 +13,9 @@
             <form id="post-form">
                 <div class="select-list">
                     <ul>
-                        <li>
-                            关键字：<input type="text" name="name"/>
-                        </li>
+<!--                        <li>-->
+<!--                            关键字：<input type="text" name="name"/>-->
+<!--                        </li>-->
                         <li>
                             <label class="font-noraml">参数类型:</label>
                         </li>
@@ -79,7 +79,7 @@
             popModalHeight: 400,
             sortName: "id",
             uniqueId: "id",
-            modalName: "编号生成器",
+            modalName: "全局参数",
             columns: [
                 {
                     checkbox: true
@@ -109,7 +109,17 @@
                 },
                 {
                     field: 'paramKey',
-                    title: '参数键值',
+                    title: '全局参数key值',
+                    sortable: true
+                },
+                {
+                    field: 'paramValue',
+                    title: '全局参数value值',
+                    sortable: true
+                },
+                {
+                    field: 'remark',
+                    title: '全局参数说明',
                     sortable: true
                 },
                 {
@@ -138,7 +148,11 @@
     function searchparam() {
         $('#platformId').attr("disabled",false);
         $.table.search();
-        $('#platformId').attr("disabled",true);
+        var ind = document.getElementById("platformParam").selectedIndex;
+        if (ind === 1) {
+            //平台禁止选择
+            $('#platformId').attr("disabled", true);
+        }
     }
     function paramType() {
         var ind = document.getElementById("platformParam").selectedIndex;

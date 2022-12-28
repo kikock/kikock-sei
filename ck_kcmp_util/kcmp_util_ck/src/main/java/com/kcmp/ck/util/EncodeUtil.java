@@ -17,7 +17,7 @@ import java.util.Base64;
  **/
 public class EncodeUtil {
 
-    public static final String DEFAULT_KEY = "JX";
+    public static final String DEFAULT_KEY = "CK";
 
     /**
      * 将byte[]转为各种进制的字符串

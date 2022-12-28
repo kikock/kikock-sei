@@ -27,13 +27,14 @@
                     <i class="fa fa-plus"></i> 新增
                 </a>
                 <form id="post-form">
-                    <input id="runtimeEnvironmentId" name="runtimeEnvironmentId"
+                    <input  id="runtimeEnvironmentId" name="runtimeEnvironmentId"  type="hidden"
                            th:value="${runtimeEnvironment.id}"/>
+                    <input  id="leftEnv" name="leftEnv" value="false"  type="hidden" />
                     <div class="select-list">
                         <ul>
-                            <li>
-                                关键字：<input type="text" name="name"/>
-                            </li>
+<!--                            <li>-->
+<!--                                关键字：<input type="text" name="name"/>-->
+<!--                            </li>-->
                             <li>
                                 <label class="font-noraml">参数类型:</label>
                             </li>
@@ -191,10 +192,16 @@
 
 
     function onClickRowRunEnvironment(row) {
+        $('#platformId').attr("disabled",false);
         $("#runtimeEnvironmentId").val(row.id); //设置URL
         let affectedRowIds = $.table.affectedRowIds(row);
-        console.log(affectedRowIds[0]);
+        $("#leftEnv").val(true); //设置URL
         $.table.search("post-form", "bootstrap-table")
+        var ind = document.getElementById("platformParam").selectedIndex;
+        if (ind === 1) {
+            //平台禁止选择
+            $('#platformId').attr("disabled", true);
+        }
     }
     function onLoadSuccessRunEnvironment(data) {
             console.log(data);
@@ -260,7 +267,11 @@
     function searchparam() {
         $('#platformId').attr("disabled",false);
         $.table.search();
-        $('#platformId').attr("disabled",true);
+        var ind = document.getElementById("platformParam").selectedIndex;
+        if (ind === 1) {
+            //平台禁止选择
+            $('#platformId').attr("disabled", true);
+        }
     }
 
 </script>

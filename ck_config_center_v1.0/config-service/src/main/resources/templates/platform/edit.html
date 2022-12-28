@@ -5,7 +5,7 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-module-edit" th:object="${platform}">
+    <form class="form-horizontal m" id="form-platform-edit" th:object="${platform}">
         <input id="id" name="id" type="hidden" th:field="*{id}"/>
 
         <div class="form-group">
@@ -46,7 +46,7 @@
     });
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/edit", $('#form-post-edit').serialize());
+            $.operate.save(prefix + "/edit", $('#form-platform-edit').serialize());
         }
     }
 

@@ -91,7 +91,7 @@ public class GlobalParamConfigServiceImpl implements GlobalParamConfigService {
      * @return 操作结果
      */
     @Override
-    public OperateResult delete(String id) {
+    public OperateResult remove(String id) {
         GlobalParamConfig entity = findOne(id);
         if (Objects.isNull(entity)) {
             return new OperateResult(OperateStatusEnum.ERROR, "要删除的全局参数配置不存在!");

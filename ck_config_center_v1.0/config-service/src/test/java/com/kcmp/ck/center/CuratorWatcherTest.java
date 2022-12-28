@@ -25,10 +25,10 @@ public class CuratorWatcherTest {
     /**
      * Zookeeper info
      */
-    private static final String ZK_ADDRESS = "kikock.tk:12181";
-    private static final String ZK_PATH = "/zktest";
+    private static final String ZK_ADDRESS = "192.168.66.88:2181";
+    private static final String ZK_PATH = "/test";
     private static final String ZK_ROOT = "/";
-    private static final String ZK_NAME_SPACE = "zk_test";
+    private static final String ZK_NAME_SPACE = "com.center.config";
 
     /**
      * 构建一个zk客户端

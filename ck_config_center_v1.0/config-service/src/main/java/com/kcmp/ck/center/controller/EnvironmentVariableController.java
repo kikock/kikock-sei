@@ -13,6 +13,7 @@ import com.kcmp.ck.config.entity.RuntimeEnvironment;
 import com.kcmp.ck.config.entity.dto.EnvVarConfig;
 import com.kcmp.ck.config.entity.dto.EnvVarConfigSearch;
 import com.kcmp.ck.config.entity.vo.OperateResultVo;
+import com.kcmp.ck.config.util.JsonUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +116,14 @@ public class EnvironmentVariableController {
     @ResponseBody
     @RequestMapping("/listAllBySearch")
     public TableDataInfo listAllBySearch(EnvVarConfigSearch search) {
+        boolean leftEnv = search.getLeftEnv();
+        if (leftEnv){
+            List<EnvVarConfig> envConfigList = service.findByPlatformAndEnv(search.getPlatformId(), search.getRuntimeEnvironmentId());
+            return new TableDataInfo(envConfigList, envConfigList.size());
+
+        }
         List<EnvVarConfig> envVarConfigList = service.findBySearch(search);
+
         return new TableDataInfo(envVarConfigList, envVarConfigList.size());
     }
     //

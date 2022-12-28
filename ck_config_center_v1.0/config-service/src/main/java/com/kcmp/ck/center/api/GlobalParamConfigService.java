@@ -70,9 +70,9 @@ public interface GlobalParamConfigService {
      * @return 操作结果
      */
     @DELETE
-    @Path("delete")
+    @Path("remove")
     @ApiOperation(value = "删除一个全局参数配置", notes = "删除一个全局参数配置")
-    OperateResult delete(String id);
+    OperateResult remove(String id);
 
     /**
      * 获取平台中可以引用的全局参数键和说明

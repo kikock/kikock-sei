@@ -21,13 +21,39 @@ public class EnvVarConfigSearch implements Serializable {
      */
     private String runtimeEnvironmentId;
     /**
-     * 是否为平台级全局参数
+     * 是否为平台级全局参数 true 平台  flase 应用
      */
     private boolean platformParam;
     /**
      * 应用模块Id
      */
     private String applicationModuleId;
+    /**
+     * 是否点击环境变量
+     */
+    private boolean leftEnv;
+    /**
+     * 关键字
+     */
+    private String name;
+
+
+
+    public boolean getLeftEnv() {
+        return leftEnv;
+    }
+
+    public void setLeftEnv(boolean leftEnv) {
+        this.leftEnv = leftEnv;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getPlatformId() {
         return platformId;
