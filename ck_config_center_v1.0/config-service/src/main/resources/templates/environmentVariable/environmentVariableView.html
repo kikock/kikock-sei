@@ -29,7 +29,7 @@
                 <form id="post-form">
                     <input  id="runtimeEnvironmentId" name="runtimeEnvironmentId"  type="hidden"
                            th:value="${runtimeEnvironment.id}"/>
-                    <input  id="leftEnv" name="leftEnv" value="false"  type="hidden" />
+                    <input  id="applicationModuleId" name="applicationModuleId" value="moduleId"  type="hidden" />
                     <div class="select-list">
                         <ul>
 <!--                            <li>-->
@@ -58,7 +58,7 @@
                                 <label id="moduleName"  class="font-noraml">应用模块</label>
                             </li>
                             <li>
-                                <select id="moduleId" name="moduleId" class="form-control">
+                                <select id="moduleId" name="moduleId" class="form-control" onchange="moduleType()">
 
                                 </select>
                             </li>
@@ -123,15 +123,15 @@
 
         var options = {
             url: prefix + "/listAllBySearch",
-            updateUrl: prefix + "/edit/{id}",
+            updateUrl: prefix + "/edit",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             sidePagination: "client",
             showSearch: false,
             popModalWidth: 800,
             popModalHeight: 400,
-            sortName: "id",
-            uniqueId: "id",
+            sortName: "name",
+            uniqueId: "environmentVariableId",
             modalName: "环境变量",
             columns: [
                 {
@@ -153,33 +153,31 @@
                     sortable: true
                 },
                 {
-                    field: 'yxhj',
-                    title: '运行环境',
-                    formatter: function (value, row, index) {
-                        return "运行环境";
-                    }
+                    field: 'runtimeEnvironmentName',
+                    title: '运行环境'
                 },
                 {
-                    field: 'xtpt',
-                    title: '系统平台',
-                    formatter: function (value, row, index) {
-                        return "系统平台";
-                    }
+                    field: 'platformName',
+                    title: '系统平台'
                 },
                 {
-                    field: 'yymk',
+                    field: 'applicationModuleName',
                     title: '应用模块',
                     formatter: function (value, row, index) {
-                        return "应用模块";
-                    }
+                       if (value){
+                        return  value;
+                       }else {
+                           return  "-";
+                       }
+                    },
                 },
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="editRow(\''+row.environmentVariableId+'\',\''+row.runtimeEnvironmentId+'\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.environmentVariableId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
@@ -194,9 +192,7 @@
     function onClickRowRunEnvironment(row) {
         $('#platformId').attr("disabled",false);
         $("#runtimeEnvironmentId").val(row.id); //设置URL
-        let affectedRowIds = $.table.affectedRowIds(row);
-        $("#leftEnv").val(true); //设置URL
-        $.table.search("post-form", "bootstrap-table")
+        $.table.search("post-form", "bootstrap-table");
         var ind = document.getElementById("platformParam").selectedIndex;
         if (ind === 1) {
             //平台禁止选择
@@ -212,11 +208,21 @@
         // 添加模块  获取筛选的平台id
         let platformId = $.form.selectSelects("platformId");
         let runtimeEnvironmentId =$("#runtimeEnvironmentId").val();
-        var url = prefix + "/add/" + platformId + "/" + runtimeEnvironmentId;
+        let moduleId =$("#applicationModuleId").val();
+        var url = prefix + "/add/" + platformId + "/" + runtimeEnvironmentId+"/"+moduleId;
         $.modal.open("添加环境变量", url);
     }
-
-
+    //弹出添加环境变量
+    function editRow(environmentVariableId,runtimeEnvironmentId) {
+        console.log(environmentVariableId);
+        console.log(runtimeEnvironmentId);
+        var url = prefix + "/edit/" + environmentVariableId + "/" + runtimeEnvironmentId;
+        $.modal.open("编辑环境变量", url);
+    }
+    function moduleType() {
+        let moduleId = $.form.selectSelects("moduleId");
+        $("#applicationModuleId").val(moduleId)
+    }
     function paramType() {
         var ind = document.getElementById("platformParam").selectedIndex;
         var platformId = $("#platformId").val();
@@ -256,6 +262,7 @@
                     for(let i = 0; i < rows.length; i++){
                         $("#" + selectId + "").append("<option value='"+rows[i].id+"'>"+rows[i].name+"</option>");//新增
                     }
+                    $("#applicationModuleId").val($("#"+selectId+" option:eq(0)").val());
                     $("#"+selectId+" option:eq(0)").attr('selected', 'selected');//选中第一个
                 }
             },
@@ -272,6 +279,7 @@
             //平台禁止选择
             $('#platformId').attr("disabled", true);
         }
+
     }
 
 </script>

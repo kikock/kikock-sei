@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:display="http://www.w3.org/1999/xhtml" lang="zh">
 <head>
-    <th:block th:include="include :: header('新增环境变量')"/>
+    <th:block th:include="include :: header('修改环境变量')"/>
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-module-add">
+    <form class="form-horizontal m" id="form-module-edit">
+        <input id="envId" name="envId"   type="hidden"   th:value="${envVariable.id}"/>
+        <input id="envConfigId" name="envConfigId"   type="hidden"   th:value="${envConfig.id}"/>
         <input id="platformId" name="platformId"   type="hidden"   th:value="${platform.id}"/>
         <input id="runtimeEnvironmentId" name="runtimeEnvironmentId"  type="hidden"
                th:value="${runtimeEnv.id}"/>
-        <div  th:if="          ${isModule}" class="form-group">
+        <div  th:if="${isModule}" class="form-group">
             <input id="applicationModuleId" name="applicationModuleId"  type="hidden"
                    th:value="${module.id}"/>
         </div>
@@ -35,19 +37,21 @@
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">代码：</label>
             <div class="col-sm-8" style="padding-right: 95px;">
-                <input class="form-control" type="text"  name="code" id="code" required>
+                <input class="form-control" type="text"  name="code" id="code"  th:value="${envVariable.code}" readonly
+                       >
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">名称：</label>
             <div class="col-sm-8" style="padding-right: 95px;">
-                <input class="form-control" type="text"  name="name" id="name" required>
+                <input class="form-control" type="text"  name="name" id="name"  th:value="${envVariable.name}" required>
             </div>
         </div>
         <div class="form-group"  >
             <label class="col-sm-3 control-label is-required">配置内容：</label>
             <div class="col-sm-8" style="padding-right: 95px;">
-                <textarea id="configValue" name="configValue" class="form-control" required style="resize:none;"></textarea>
+                <textarea id="configValue" name="configValue" class="form-control"  th:value="${envConfig.configValue}" required
+                          style="resize:none;">[[${envConfig.configValue}]]</textarea>
             </div>
         </div>
     </form>
@@ -59,7 +63,7 @@
 
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/add", $('#form-module-add').serialize());
+            $.operate.save(prefix + "/edit", $('#form-module-edit').serialize());
         }
     }
 </script>

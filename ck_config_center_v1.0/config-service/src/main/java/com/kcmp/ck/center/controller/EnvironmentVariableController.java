@@ -1,6 +1,7 @@
 package com.kcmp.ck.center.controller;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.kcmp.ck.center.api.ApplicationModuleService;
 import com.kcmp.ck.center.api.ApplicationServiceService;
 import com.kcmp.ck.center.api.EnvironmentVariableService;
 import com.kcmp.ck.center.api.PlatformService;
@@ -8,13 +9,18 @@ import com.kcmp.ck.center.api.RuntimeEnvironmentService;
 import com.kcmp.ck.center.util.TableDataInfo;
 import com.kcmp.ck.config.entity.ApplicationModule;
 import com.kcmp.ck.config.entity.ApplicationService;
+import com.kcmp.ck.config.entity.EnvironmentVarConfig;
+import com.kcmp.ck.config.entity.EnvironmentVariable;
+import com.kcmp.ck.config.entity.GlobalParamConfig;
 import com.kcmp.ck.config.entity.Platform;
 import com.kcmp.ck.config.entity.RuntimeEnvironment;
 import com.kcmp.ck.config.entity.dto.EnvVarConfig;
 import com.kcmp.ck.config.entity.dto.EnvVarConfigSearch;
+import com.kcmp.ck.config.entity.util.AesUtil;
 import com.kcmp.ck.config.entity.vo.OperateResultVo;
 import com.kcmp.ck.config.util.JsonUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,6 +50,8 @@ public class EnvironmentVariableController {
     private RuntimeEnvironmentService runService;
     @Autowired
     private PlatformService platformService;
+    @Autowired
+    private ApplicationModuleService applicationModuleService;
 
     @RequestMapping("/show")
     public String show(ModelMap mmap) {
@@ -62,19 +70,57 @@ public class EnvironmentVariableController {
     /**
      * 新增应用服务
      */
-    @GetMapping("/add/{platformId}/{runtimeEnvironmentId}")
+    @GetMapping("/add/{platformId}/{runtimeEnvironmentId}/{moduleId}")
     public String add(@PathVariable("platformId") String platformId,
-                      @PathVariable("runtimeEnvironmentId") String runtimeEnvironmentId, ModelMap mmap) {
-        //平台id
-        mmap.put("platformId", platformId);
-        //运行环境
-        mmap.put("runtimeEnvironmentId", runtimeEnvironmentId);
+                      @PathVariable("runtimeEnvironmentId") String runtimeEnvironmentId,
+                      @PathVariable("moduleId") String moduleId,
+                      ModelMap mmap) {
         //应用模块
-        // List<ApplicationModule> applicationModuleList = applicationModuleService.getPlatformModule(platformId);
-        // mmap.put("platformModule", applicationModuleList);
+        Platform platform = platformService.findOne(platformId);
+        RuntimeEnvironment runtimeEnvironment = runService.findOne(runtimeEnvironmentId);
+        //平台信息
+        mmap.put("platform", platform);
+        //运行环境
+        mmap.put("runtimeEnv", runtimeEnvironment);
+        mmap.put("isModule", false);
+        if(!"moduleId".equals(moduleId)){
+            mmap.put("isModule", true);
+            ApplicationModule applicationModule = applicationModuleService.findOne(moduleId);
+            mmap.put("module", applicationModule);
+        }
         return "environmentVariable/add";
     }
+    /**
+     * 修改运行环境
+     */
+    @GetMapping("/edit/{environmentVariableId}/{runtimeEnvironmentId}")
+    public String edit(@PathVariable("environmentVariableId") String environmentVariableId,@PathVariable("runtimeEnvironmentId")String runtimeEnvironmentId, ModelMap mmap) {
+        EnvironmentVarConfig envConfig = service.findByEnvId(runtimeEnvironmentId,environmentVariableId);
+        //平台信息
+        mmap.put("envConfig", envConfig);
+        //平台信息
+        mmap.put("platform", envConfig.getEnvironmentVariable().getPlatform());
+        //运行环境
+        mmap.put("runtimeEnv", envConfig.getRuntimeEnvironment());
+        mmap.put("isModule",false);
+        mmap.put("envVariable",envConfig.getEnvironmentVariable());
+        if(StringUtils.isNotBlank(envConfig.getEnvironmentVariable().getApplicationModuleId())) {
+            //模块参数
+            ApplicationModule applicationModule = applicationModuleService.findOne(envConfig.getEnvironmentVariable().getApplicationModuleId());
+            mmap.put("isModule",true);
+            mmap.put("module", applicationModule);
+        }
+        return "environmentVariable/edit";
+    }
+    /**
+     * 修改运行环境
+     */
 
+    @PostMapping("/edit")
+    @ResponseBody
+    public OperateResultVo editSave(EnvVarConfig envVarConfig) {
+        return new OperateResultVo(service.editSave(envVarConfig));
+    }
     /**
      * 打开环境变量页面
      */
@@ -116,66 +162,22 @@ public class EnvironmentVariableController {
     @ResponseBody
     @RequestMapping("/listAllBySearch")
     public TableDataInfo listAllBySearch(EnvVarConfigSearch search) {
-        boolean leftEnv = search.getLeftEnv();
-        if (leftEnv){
-            List<EnvVarConfig> envConfigList = service.findByPlatformAndEnv(search.getPlatformId(), search.getRuntimeEnvironmentId());
-            return new TableDataInfo(envConfigList, envConfigList.size());
 
-        }
         List<EnvVarConfig> envVarConfigList = service.findBySearch(search);
 
         return new TableDataInfo(envVarConfigList, envVarConfigList.size());
     }
-    //
-    // /**
-    //  * 保存一个环境变量配置
-    //  *
-    //  * @param envVarConfig 环境变量配置
-    //  * @return 保存结果
-    //  */
-    // @ResponseBody
-    // @RequestMapping("/save")
-    // public OperateResultVo save(EnvVarConfig envVarConfig) {
-    //     EnvironmentVariableService client = JAXRSClientFactory.create(ServletApplication.apiBaseAddress, EnvironmentVariableService.class, Arrays.asList(new JacksonJsonProvider()));
-    //     return new OperateResultVo(client.save(envVarConfig));
-    // }
-    //
-    // /**
-    //  * 删除环境变量配置
-    //  *
-    //  * @param environmentVariableId 环境变量id
-    //  * @return 操作结果
-    //  */
-    // @ResponseBody
-    // @RequestMapping("/delete")
-    // public OperateResultVo delete(String environmentVariableId) {
-    //     EnvironmentVariableService client = JAXRSClientFactory.create(ServletApplication.apiBaseAddress, EnvironmentVariableService.class, Arrays.asList(new JacksonJsonProvider()));
-    //     return new OperateResultVo(client.delete(environmentVariableId));
-    // }
-    //
-    // /**
-    //  * 用平台默认的密钥加密
-    //  *
-    //  * @param data 待加密数据
-    //  * @return 加密后的数据
-    //  */
-    // @ResponseBody
-    // @RequestMapping("/encrypt")
-    // public Object encrypt(String data) {
-    //     String results = AesUtil.encrypt(data);
-    //     return new Object[]{results};
-    // }
-    //
-    // /**
-    //  * 用平台默认的密钥解密
-    //  *
-    //  * @param data 待解密数据
-    //  * @return 解密后的数据
-    //  */
-    // @ResponseBody
-    // @RequestMapping("/decrypt")
-    // public Object decrypt(String data) {
-    //     String results = AesUtil.decrypt(data);
-    //     return new Object[]{results};
-    // }
+
+
+    /**
+     * 删除环境变量配置
+     *
+     * @param ids 环境变量id
+     * @return 操作结果
+     */
+    @ResponseBody
+    @RequestMapping("/remove")
+    public OperateResultVo delete(String ids) {
+        return new OperateResultVo(service.delete(ids));
+    }
 }

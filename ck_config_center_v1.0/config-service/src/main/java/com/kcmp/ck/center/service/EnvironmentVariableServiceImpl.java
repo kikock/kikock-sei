@@ -72,6 +72,7 @@ public class EnvironmentVariableServiceImpl implements EnvironmentVariableServic
             envVarConfig.setConfigValue("");
         }
         //获取环境变量，判断是否已经存在
+        // 平台id
         String platformId = envVarConfig.getPlatformId();
         String code = envVarConfig.getCode();
         EnvironmentVariable environmentVariable = dao.findFirstByPlatformIdAndCode(platformId, code);
@@ -84,10 +85,7 @@ public class EnvironmentVariableServiceImpl implements EnvironmentVariableServic
             }
         }
         String runtimeEnvironmentId = envVarConfig.getRuntimeEnvironmentId();
-        String applicationModuleId = null;
-        if (Objects.nonNull(envVarConfig.getApplicationModule())) {
-            applicationModuleId = envVarConfig.getApplicationModule().getId();
-        }
+        String applicationModuleId = envVarConfig.getApplicationModuleId();
         //如果不存在则创建
         if (Objects.isNull(environmentVariable)) {
             environmentVariable = new EnvironmentVariable();
@@ -119,6 +117,31 @@ public class EnvironmentVariableServiceImpl implements EnvironmentVariableServic
             environmentVarConfigDao.save(environmentVarConfig);
         }
         result.setMessage(String.format("环境变量[%s-%s]保存成功！", code, environmentVariable.getName()));
+        return result;
+    }
+
+    @Override
+    public OperateResult editSave(EnvVarConfig envVarConfig) {
+        OperateResult result = new OperateResult("更新环境变量配置成功！");
+        Optional<EnvironmentVarConfig> one1 = environmentVarConfigDao.findById(envVarConfig.getEnvConfigId());
+        EnvironmentVarConfig environmentVarConfig = one1.get();
+        if (Objects.isNull(environmentVarConfig)){
+            result.setOperateStatusEnum(OperateStatusEnum.ERROR);
+            result.setMessage("环境变量不存在！");
+            return result;
+        }
+        Optional<EnvironmentVariable> one2 = dao.findById(envVarConfig.getEnvId());
+        EnvironmentVariable environmentVariable = one2.get();
+        if (Objects.isNull(environmentVariable)){
+            result.setOperateStatusEnum(OperateStatusEnum.ERROR);
+            result.setMessage("环境变量不存在！");
+            return result;
+        }
+        environmentVariable.setName(envVarConfig.getName());
+        environmentVariable.setCode(envVarConfig.getCode());
+        environmentVarConfig.setConfigValue(envVarConfig.getConfigValue());
+        dao.save(environmentVariable);
+        environmentVarConfigDao.save(environmentVarConfig);
         return result;
     }
 
@@ -184,7 +207,7 @@ public class EnvironmentVariableServiceImpl implements EnvironmentVariableServic
         //判断是否为平台级配置
         if (search.isPlatformParam()) {
             varConfigs = environmentVarConfigDao.findAllByPlatformIdAndRuntimeEnvironmentIdAndApplicationModuleIdIsNull(platformId, runtimeEnvId);
-        } else if (StringUtils.isEmpty(applicationModuleId)) {
+        } else if ( StringUtils.isEmpty(applicationModuleId)) {
             varConfigs = environmentVarConfigDao.findAllByPlatformIdAndRuntimeEnvironmentIdAndApplicationModuleIdIsNotNull(platformId, runtimeEnvId);
         } else {
             varConfigs = environmentVarConfigDao.findAllByPlatformIdAndRuntimeEnvironmentIdAndApplicationModuleId(platformId, runtimeEnvId, applicationModuleId);
@@ -194,6 +217,16 @@ public class EnvironmentVariableServiceImpl implements EnvironmentVariableServic
         }
         //构造DTO
         return varConfigs.stream().map(EnvVarConfig :: new).collect(Collectors.toList());
+    }
+
+    @Override
+    public EnvironmentVarConfig findByEnvId(String runtimeEnvironmentId,String environmentVariableId) {
+
+        //获取变量配置值，判断是否存在
+        EnvironmentVarConfig environmentVarConfig =
+                environmentVarConfigDao.findFirstByRuntimeEnvironmentIdAndEnvironmentVariableId(runtimeEnvironmentId,
+                        environmentVariableId);
+        return environmentVarConfig;
     }
 
     /**

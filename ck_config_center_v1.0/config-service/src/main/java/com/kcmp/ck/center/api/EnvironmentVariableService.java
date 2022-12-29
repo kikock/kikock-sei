@@ -1,5 +1,6 @@
 package com.kcmp.ck.center.api;
 
+import com.kcmp.ck.config.entity.EnvironmentVarConfig;
 import com.kcmp.ck.config.entity.EnvironmentVariable;
 import com.kcmp.ck.config.entity.dto.EnvVarConfig;
 import com.kcmp.ck.config.entity.dto.EnvVarConfigSearch;
@@ -51,7 +52,16 @@ public interface EnvironmentVariableService {
     @Path("save")
     @ApiOperation(value = "保存环境变量配置", notes = "保存环境变量配置")
     OperateResult save(EnvVarConfig envVarConfig);
-
+    /**
+     * 保存环境变量配置
+     *
+     * @param envVarConfig 环境变量配置
+     * @return 操作结果
+     */
+    @POST
+    @Path("editSave")
+    @ApiOperation(value = "保存环境变量配置", notes = "保存环境变量配置")
+    OperateResult editSave(EnvVarConfig envVarConfig);
     /**
      * 删除环境变量配置
      *
@@ -85,4 +95,17 @@ public interface EnvironmentVariableService {
     @Path("findBySearch")
     @ApiOperation(value = "通过查询参数获取环境变量配置清单", notes = "通过查询参数获取环境变量配置清单")
     List<EnvVarConfig> findBySearch(EnvVarConfigSearch search);
+
+    /**
+     * 通过id获取环境变量配置
+     *
+     * @param environmentVariableId 环境变量id
+     * @param runtimeEnvironmentId 运行环境id     *
+     * @return 环境变量配置清单
+     */
+    @POST
+    @Path("findByEnvId")
+    @ApiOperation(value = "根据环境变量id获取运行环境", notes = "根据环境变量id获取运行环境")
+    EnvironmentVarConfig findByEnvId(String runtimeEnvironmentId,String environmentVariableId);
+
 }
