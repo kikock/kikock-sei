@@ -1,0 +1,5 @@
+rootProject.name = 'ck_kcmp_test'
+include 'test_kcmp_api'
+include 'test_kcmp_entity'
+include 'test_kcmp_service'
+
