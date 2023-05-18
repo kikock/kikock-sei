@@ -1,0 +1,8 @@
+rootProject.name = 'ck_flow_service_v1.0'
+include 'flow_entity_ck'
+include 'flow_dao_ck'
+include 'flow_service_ck'
+include 'flow_api_ck'
+include 'flow_common_web_ck'
+include 'flow_service_client_ck'
+

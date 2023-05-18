@@ -1,0 +1,41 @@
+INSERT INTO EnvironmentConfig
+(id,
+ CODE,
+ NAME,
+ configValue,
+ encrypted)
+VALUES
+  (UUID(),
+   'KCMP_FLOW_DB_HOST',
+   'KCMP工作流数据库服务器',
+   '10.4.68.45:3306',
+   0),
+  (UUID(),
+   'KCMP_FLOW_DB_PASSWORD',
+   'KCMP工作流数据库密码',
+   'I1BoZOZptO+Dx1P3PAm7Ag==',
+   0),
+  (UUID(),
+   'FLOW_JDBC_DRIVER',
+   'KCMP工作流数据库驱动器',
+   'com.mysql.jdbc.Driver',
+   0);
+
+INSERT INTO GlobalParameter
+(id,
+ paramDataType,
+ paramKey,
+ paramValue,
+ remark)
+VALUES
+  (UUID(),
+   1,
+   'KCMP_FLOW',
+   'jdbc_url=jdbc:mysql://{KCMP_FLOW_DB_HOST}/kcmp_flow?characterEncoding=utf8
+   jdbc_username=sa
+   jdbc_password={KCMP_FLOW_DB_PASSWORD}
+   jdbc_driver={FLOW_JDBC_DRIVER}
+   ds_initial_size=10
+   ds_min_idle=10
+   ds_max_active=50',
+   'KCMP工作流参数');
