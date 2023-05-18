@@ -1,5 +1,6 @@
 package com.kcmp.core.ck.dao;
 
+import com.kcmp.core.ck.dao.jpa.BaseDao;
 import com.kcmp.core.ck.entity.BaseEntity;
 import com.kcmp.core.ck.entity.TreeEntity;
 import org.springframework.data.repository.NoRepositoryBean;

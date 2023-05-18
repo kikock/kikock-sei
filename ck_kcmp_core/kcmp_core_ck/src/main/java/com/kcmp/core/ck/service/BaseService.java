@@ -7,14 +7,14 @@ import com.kcmp.ck.util.ApiClient;
 import com.kcmp.ck.vo.OperateResult;
 import com.kcmp.ck.vo.OperateResultWithData;
 import com.kcmp.ck.vo.ResponseData;
-import com.kcmp.core.ck.dao.BaseDao;
+import com.kcmp.core.ck.dao.jpa.BaseDao;
 import com.kcmp.core.ck.entity.IDataDict;
 import com.kcmp.core.ck.entity.ITenant;
 import com.kcmp.core.ck.entity.auth.IDataAuthEntity;
 import com.kcmp.core.ck.entity.vo.DataDictVo;
-import com.kcmp.core.ck.search.PageResult;
-import com.kcmp.core.ck.search.Search;
-import com.kcmp.core.ck.search.SearchFilter;
+import com.kcmp.core.ck.dto.PageResult;
+import com.kcmp.core.ck.dto.Search;
+import com.kcmp.core.ck.dto.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -249,6 +249,8 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
 
     /**
      * 单一条件对象查询数据集合
+     * @param searchFilter 功能项代码
+     * @return 业务实体列表
      */
     @Transactional(readOnly = true)
     public List<T> findByFilter(SearchFilter searchFilter) {

@@ -2,13 +2,12 @@
 dependencies {
 
     compile (
-            'com.kcmp.ck:kcmp_context_ck:1.0.0',
-            'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final',
-            'org.hibernate:hibernate-core:5.2.17.Final',
-            'org.springframework.data:spring-data-elasticsearch:3.0.10.RELEASE',
-            'org.springframework.data:spring-data-jpa:2.0.10.RELEASE',
-            'org.springframework.data:spring-data-redis:2.0.10.RELEASE',
+            "com.kcmp.ck:kcmp_context_ck:${start_version}",
+            "org.springframework.data:spring-data-jpa:${springBootVersion}",
+            "org.springframework.data:spring-data-redis:${springBootVersion}",
             "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}",
+            "org.springframework.data:spring-data-elasticsearch:3.0.10.RELEASE",
+            "org.hibernate:hibernate-core:5.2.17.Final",
             "net.sf.json-lib:json-lib:2.4:jdk15@jar",
     )
     compile (
@@ -17,7 +16,6 @@ dependencies {
         exclude group: 'javax.ws.rs', module: 'jsr311-api'
     }
 }
-
 // 打jar包
 jar {
     manifest {

@@ -1,0 +1,62 @@
+// 依赖
+dependencies {
+
+    compile (
+            "com.kcmp.ck:kcmp_util_ck:${start_version}",
+            "org.springframework:spring-context:${springVersion}",
+            "ch.qos.logback:logback-classic:1.2.3",
+            "ch.qos.logback:logback-core:1.2.3",
+            "javax.ws.rs:javax.ws.rs-api:2.0.1",
+            "org.apache.cxf:cxf-rt-rs-client:3.1.10",
+            "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.10.5",
+            "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.10.5",
+            "com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.10.5",
+            "io.zipkin.brave:brave:4.19.1",
+            "io.zipkin.brave:brave-instrumentation-http:4.19.1",
+            "io.zipkin.brave:brave-instrumentation-jaxrs2:4.19.1",
+            "org.apache.curator:curator-recipes:4.2.0",
+    )
+}
+
+// 打jar包
+jar {
+    manifest {
+        attributes("Manifest-Version": "$project.version")
+        attributes("Extension-Name": "$project.name")
+        attributes("Build-Time": new Date().format("yyyy-MM-dd HH:mm:ss"))
+    }
+}
+/////////////////////////////////////上传Maven仓库////////////////////////////////////////
+//打包源代码
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+//如果希望gradle install，安装到.m2本地仓库，参考下面的内容
+install {
+    repositories.mavenInstaller {
+        pom.version = "$project.version"
+        pom.artifactId = "$project.name"
+        pom.groupId = "$project.group"
+    }
+}
+
+//上传到nexus
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: MAVEN_REPO_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+            pom.version = "$project.version"
+            pom.artifactId = "$project.name"
+            pom.groupId = "$project.group"
+        }
+    }
+    return 'Success'
+}

@@ -1,5 +1,6 @@
 package com.kcmp.core.ck.dao.impl;
 
+import com.kcmp.core.ck.dao.jpa.impl.BaseDaoImpl;
 import com.kcmp.core.ck.entity.BaseEntity;
 
 import javax.persistence.EntityManager;

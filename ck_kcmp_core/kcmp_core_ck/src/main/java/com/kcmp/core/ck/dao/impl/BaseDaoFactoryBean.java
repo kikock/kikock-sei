@@ -1,10 +1,12 @@
 package com.kcmp.core.ck.dao.impl;
 
+import com.kcmp.core.ck.dao.jpa.impl.BaseDaoImpl;
+import com.kcmp.core.ck.dao.jpa.impl.DaoImplMapper;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
-import org.springframework.data.jpa.repository.support.QuerydslJpaRepository;
+import org.springframework.data.jpa.repository.support.QuerydslJpaPredicateExecutor;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -21,10 +23,16 @@ import static org.springframework.data.querydsl.QuerydslUtils.QUERY_DSL_PRESENT;
  * 工厂dao基类
  * @email kikock@qq.com
  **/
+
 @SuppressWarnings("unchecked")
 public class BaseDaoFactoryBean<R extends JpaRepository<T, Serializable>, T extends Persistable>
         extends JpaRepositoryFactoryBean<R, T, Serializable> {
 
+    /**
+     * Creates a new {@link JpaRepositoryFactoryBean} for the given repository interface.
+     *
+     * @param repositoryInterface must not be {@literal null}.
+     */
     public BaseDaoFactoryBean(Class<? extends R> repositoryInterface) {
         super(repositoryInterface);
     }
@@ -42,16 +50,16 @@ public class BaseDaoFactoryBean<R extends JpaRepository<T, Serializable>, T exte
             @Override
             protected Class<?> getRepositoryBaseClass(RepositoryMetadata metadata) {
                 if (isQueryDslExecutor(metadata.getRepositoryInterface())) {
-                    return QuerydslJpaRepository.class;
+                    return QuerydslJpaPredicateExecutor.class;
                 } else {
                     Class clazz = metadata.getDomainType();
-
                     return new DaoImplMapper<T>().getRepositoryBaseClass(clazz);
                 }
             }
 
             /**
-             * 返回给定的存储库接口是否需要选择特定于QueryDsl的实现
+             * Returns whether the given repository interface requires a QueryDsl specific implementation to be chosen.
+             *
              * @param repositoryInterface
              * @return
              */

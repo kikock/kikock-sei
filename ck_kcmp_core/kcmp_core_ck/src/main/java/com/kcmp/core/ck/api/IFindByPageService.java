@@ -1,8 +1,8 @@
 package com.kcmp.core.ck.api;
 
 import com.kcmp.core.ck.entity.BaseEntity;
-import com.kcmp.core.ck.search.PageResult;
-import com.kcmp.core.ck.search.Search;
+import com.kcmp.core.ck.dto.PageResult;
+import com.kcmp.core.ck.dto.Search;
 import io.swagger.annotations.ApiOperation;
 
 import javax.ws.rs.POST;

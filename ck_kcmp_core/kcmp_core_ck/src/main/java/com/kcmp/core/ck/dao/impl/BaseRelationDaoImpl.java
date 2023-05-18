@@ -1,10 +1,11 @@
 package com.kcmp.core.ck.dao.impl;
 
 import com.kcmp.core.ck.dao.BaseRelationDao;
+import com.kcmp.core.ck.dao.jpa.impl.BaseDaoImpl;
 import com.kcmp.core.ck.entity.AbstractEntity;
 import com.kcmp.core.ck.entity.IRank;
 import com.kcmp.core.ck.entity.RelationEntity;
-import com.kcmp.core.ck.search.SearchFilter;
+import com.kcmp.core.ck.dto.SearchFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

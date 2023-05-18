@@ -1,3 +1,5 @@
 rootProject.name = 'ck_kcmp_core'
 include 'kcmp_core_ck'
-
+include 'kcmp_util_ck'
+include 'kcmp_context_ck'
+include 'kcmp_spring_boot_starter'

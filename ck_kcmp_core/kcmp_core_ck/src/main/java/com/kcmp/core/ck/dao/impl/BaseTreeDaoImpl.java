@@ -2,13 +2,14 @@ package com.kcmp.core.ck.dao.impl;
 
 import com.kcmp.ck.context.ContextUtil;
 import com.kcmp.core.ck.dao.BaseTreeDao;
+import com.kcmp.core.ck.dao.jpa.impl.BaseDaoImpl;
 import com.kcmp.core.ck.entity.BaseEntity;
 import com.kcmp.core.ck.entity.IFrozen;
 import com.kcmp.core.ck.entity.ITenant;
 import com.kcmp.core.ck.entity.TreeEntity;
-import com.kcmp.core.ck.search.Search;
-import com.kcmp.core.ck.search.SearchFilter;
-import com.kcmp.core.ck.search.SearchOrder;
+import com.kcmp.core.ck.dto.Search;
+import com.kcmp.core.ck.dto.SearchFilter;
+import com.kcmp.core.ck.dto.SearchOrder;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;

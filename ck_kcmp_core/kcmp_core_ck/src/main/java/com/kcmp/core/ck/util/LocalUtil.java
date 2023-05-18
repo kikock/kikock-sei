@@ -5,7 +5,7 @@ import com.kcmp.ck.util.JsonUtils;
 import com.kcmp.ck.util.ReflectionUtils;
 import com.kcmp.core.ck.entity.BaseEntity;
 import com.kcmp.core.ck.entity.LocalLang;
-import com.kcmp.core.ck.search.PageResult;
+import com.kcmp.core.ck.dto.PageResult;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;

@@ -135,11 +135,11 @@ public abstract class BaseEntityService<T extends BaseEntity> extends BaseServic
             //如果是租户的业务员实体，检查租户中代码是否存在
             if (ITenant.class.isAssignableFrom(getDao().getEntityClass())) {
                 ITenant tenantEntity = (ITenant) entity;
-                if (getDao().isCodeExists(tenantEntity.getTenantCode(), codeUnique.getCode(), IdGenerator.uuid())) {
+                if (getDao().isExistsByCode(codeUnique.getCode(), IdGenerator.uuid(),tenantEntity.getTenantCode())) {
                     //代码[{0}]在租户[{1}]已存在，请重新输入！
                     return OperateResultWithData.operationFailureWithData(entity, "kcmp_service_00013", codeUnique.getCode(), tenantEntity.getTenantCode());
                 }
-            } else if (getDao().isCodeExists(codeUnique.getCode(), IdGenerator.uuid())) {
+            } else if (getDao().isExistsByCode(codeUnique.getCode(), IdGenerator.uuid())) {
                 //代码[{0}]已存在，请重新输入！
                 return OperateResultWithData.operationFailureWithData(entity, "kcmp_service_00012", codeUnique.getCode());
             }
@@ -159,11 +159,11 @@ public abstract class BaseEntityService<T extends BaseEntity> extends BaseServic
             //如果是租户的业务员实体，检查租户中代码是否存在
             if (ITenant.class.isAssignableFrom(getDao().getEntityClass())) {
                 ITenant tenantEntity = (ITenant) entity;
-                if (getDao().isCodeExists(tenantEntity.getTenantCode(), codeUnique.getCode(), entity.getId())) {
+                if (getDao().isExistsByCode(codeUnique.getCode(), entity.getId(),tenantEntity.getTenantCode())) {
                     //代码[{0}]已存在，请重新输入！
                     return OperateResultWithData.operationFailureWithData(entity, "kcmp_service_00013", codeUnique.getCode(), tenantEntity.getTenantCode());
                 }
-            } else if (getDao().isCodeExists(codeUnique.getCode(), entity.getId())) {
+            } else if (getDao().isExistsByCode(codeUnique.getCode(), entity.getId())) {
                 //代码[{0}]已存在，请重新输入！
                 return OperateResultWithData.operationFailureWithData(entity, "kcmp_service_00012", codeUnique.getCode());
             }

@@ -1,10 +1,10 @@
 package com.kcmp.core.ck.util;
 
-import com.kcmp.core.ck.search.PageInfo;
-import com.kcmp.core.ck.search.PageResult;
-import com.kcmp.core.ck.search.QueryParam;
-import com.kcmp.core.ck.search.QuerySql;
-import com.kcmp.core.ck.search.SearchOrder;
+import com.kcmp.core.ck.dto.PageInfo;
+import com.kcmp.core.ck.dto.PageResult;
+import com.kcmp.core.ck.dto.QueryParam;
+import com.kcmp.core.ck.dto.QuerySql;
+import com.kcmp.core.ck.dto.SearchOrder;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.EntityManager;
