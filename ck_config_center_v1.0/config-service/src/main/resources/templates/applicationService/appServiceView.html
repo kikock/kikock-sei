@@ -33,7 +33,9 @@
                     <a class="btn btn-warning" onclick="distribute()">
                         <i class="fa fa-upload"></i> 发布
                     </a>
-
+                    <a class="btn btn-warning" onclick="dataInfo()">
+                        <i class="fa fa-database"></i> 读取配置文件
+                    </a>
                     <form id="post-form">
                         <div class="select-list">
                             <input id="runtimeEnvironmentId" name="runtimeEnvironmentId" type="hidden"
@@ -183,7 +185,23 @@
             $.operate.submit(url, "post", "json", data);
         });
     }
-
+    //获取应用参数
+    function dataInfo() {
+        var url = prefix + "/findZookeeperData";
+        table.set();
+        var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+            var data = {"ids": rows.join()};
+            $.operate.post(url, data,findZookeeperData);
+    }
+    function findZookeeperData(data){
+        data.operateStatusEnum ='SUCCESS';
+        data.msg=data.message;
+        console.log(data);
+    }
 </script>
 </body>
 </html>

@@ -11,6 +11,7 @@ import com.kcmp.ck.config.entity.Platform;
 import com.kcmp.ck.config.entity.RuntimeEnvironment;
 import com.kcmp.ck.config.entity.dto.OperateResult;
 import com.kcmp.ck.config.entity.vo.OperateResultVo;
+import com.kcmp.ck.vo.ResponseData;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -141,8 +142,23 @@ public class ApplicationServiceController {
 
     @ResponseBody
     @RequestMapping("/distribute")
-    OperateResult distribute(String ids) {
+    public OperateResult distribute(String ids) {
         List<String> letters = Arrays.asList(ids);
         return new OperateResultVo(service.distribute(letters));
     }
+
+    /**
+     * 发布全局参数配置
+     *
+     * @param ids 应用服务Id
+     * @return 操作结果
+     */
+
+    @ResponseBody
+    @RequestMapping("/findZookeeperData")
+    public ResponseData findZookeeperData(String ids) {
+        List<String> letters = Arrays.asList(ids);
+        return service.findZookeeperData(letters);
+    }
+
 }

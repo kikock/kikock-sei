@@ -5,12 +5,15 @@ import com.kcmp.ck.center.dao.ApplicationServiceDao;
 import com.kcmp.ck.config.entity.ApplicationService;
 import com.kcmp.ck.config.entity.dto.OperateResult;
 import com.kcmp.ck.config.entity.enums.OperateStatusEnum;
+import com.kcmp.ck.vo.ResponseData;
 import jodd.typeconverter.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -124,7 +127,37 @@ public class ApplicationServiceServiceImpl implements ApplicationServiceService 
         result.setMessage(String.format("%d个应用服务的全局参数配置发布成功！", applicationServices.size()));
         return result;
     }
-
+    /**
+     * 发布全局参数配置
+     *
+     * @param ids 应用服务Id
+     * @return 操作结果
+     */
+    @Override
+    public ResponseData findZookeeperData(List<String> ids) {
+        ResponseData result = ResponseData.build();
+        List<ApplicationService> applicationServices = dao.findAllById(ids);
+        if (applicationServices.isEmpty()) {
+            return result.setSuccess(false).setMessage("操作失败");
+        }
+        Map<String,HashMap> map = new HashMap<>();
+        for (ApplicationService a : applicationServices) {
+            try {
+                HashMap zookeeperNode = globalParamService.getZookeeperNode(a.getAppId());
+                zookeeperNode.put("appId",a.getAppId());
+                map.put(a.getRemark(),zookeeperNode);
+            } catch (Exception e) {
+                e.printStackTrace();
+                result.setSuccess(false);
+                result.setMessage(String.format("应用服务【%s】查找失败！%s", a.getRemark(), e.getMessage()));
+                return result;
+            }
+        }
+        result.setMessage(String.format("找到%d个应用服务的全局参数！", applicationServices.size()));
+        result.setSuccess(true);
+        result.setData(map);
+        return result;
+    }
     /**
      * 通过平台和环境获取应用服务
      *

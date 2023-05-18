@@ -2,6 +2,7 @@ package com.kcmp.ck.center.api;
 
 import com.kcmp.ck.config.entity.ApplicationService;
 import com.kcmp.ck.config.entity.dto.OperateResult;
+import com.kcmp.ck.vo.ResponseData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -63,7 +64,7 @@ public interface ApplicationServiceService {
     /**
      * 删除一个应用服务
      *
-     * @param id 应用服务Id
+     * @param ids 应用服务Id
      * @return 操作结果
      */
     @DELETE
@@ -82,6 +83,17 @@ public interface ApplicationServiceService {
     @ApiOperation(value = "发布全局参数配置", notes = "发布全局参数配置")
     OperateResult distribute(List<String> ids);
 
+
+    /**
+     * 查看全局参数
+     *
+     * @param ids 应用服务Id
+     * @return 操作结果
+     */
+    @POST
+    @Path("findZookeeperData")
+    @ApiOperation(value = "发布全局参数配置", notes = "发布全局参数配置")
+    ResponseData findZookeeperData(List<String> ids);
     /**
      * 通过平台和环境获取应用服务
      *

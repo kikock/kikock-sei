@@ -252,6 +252,7 @@ public class GlobalParamServiceImpl implements GlobalParamService {
                 //删除节点
                 client.delete().forPath(path);
             }
+            System.out.println("删除成功");
         } catch (Exception e) {
             e.printStackTrace();
             //        } finally {
@@ -286,6 +287,7 @@ public class GlobalParamServiceImpl implements GlobalParamService {
                 //更新节点
                 client.setData().forPath(path, paramsJson.getBytes());
             }
+            System.out.println("添加成功");
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
